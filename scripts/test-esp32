@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+
+REPO_ROOT="$(dirname ${BASH_SOURCE[0]})/.."
+cd ${REPO_ROOT}
+
+pio run --environment test-e2e-default --target upload
+
+cd e2e-tests
+uv run pytest

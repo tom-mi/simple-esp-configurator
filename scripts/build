@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -euo pipefail
+
+REPO_ROOT="$(dirname ${BASH_SOURCE[0]})/.."
+cd ${REPO_ROOT}
+
+pio run

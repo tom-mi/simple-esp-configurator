@@ -1,0 +1,89 @@
+#pragma once
+#include <memory>
+#include <string>
+#include <vector>
+// TODO make this Esp8266 compatible
+#include <WebServer.h>
+
+#include "EspConfigurator_common.h"
+
+#include "BooleanField.h"
+#include "CustomHtmlField.h"
+#include "IPv4AddressField.h"
+#include "NumberField.h"
+#include "StringField.h"
+
+namespace SimpleEspConfigurator {
+    class ConfiguratorCore {
+    public:
+        ConfiguratorCore() { addMenuItem("/config", "Configuration"); }
+
+        virtual ~ConfiguratorCore() = default;
+
+
+        void deviceName(const std::string &name) { _deviceName = name; }
+        /**
+         * @brief Set custom HTML to prepend to the rendered home page body.
+         */
+        void customHomePageHtml(const std::string &html) {
+            _customHomePageHtml = html;
+        }
+
+        WebServer *server() { return &_server; };
+
+        void startWebServer();
+
+        virtual void loop();
+
+        /**
+         * @brief Reboot the ESP device.
+         */
+        static void reboot();
+
+        /**
+         * @brief Reset stored configuration and reboot.
+         */
+        static void reset();
+
+        void addField(EspConfiguratorField *field) {
+            _fields.push_back(field);
+        }
+
+        void addMenuItem(const std::string &path, const std::string &label);
+
+        [[nodiscard]] std::string renderPage(const std::string &title,
+                                             const std::string &body,
+                                             const std::string &extraHead = "",
+                                             bool backButton = true) const;
+
+    protected:
+        [[nodiscard]] std::string
+        _renderConfigPage(bool hasValidationError = false) const;
+
+        [[nodiscard]] std::string _renderRebootPage(const std::string &message) const;
+
+        [[nodiscard]] std::string _renderHomePage() const;
+
+        static std::string _generateDeviceName();
+
+        std::string _deviceName = _generateDeviceName();
+        WebServer _server;
+
+    private:
+        std::vector<EspConfiguratorField *> _fields;
+
+        // Menu system: list of navigation items.
+        struct MenuItem {
+            std::string path;
+            std::string label;
+        };
+
+        std::vector<MenuItem> _menu;
+
+        [[nodiscard]] bool _saveConfigFromForm() const;
+
+        static void _erasePreferences();
+
+        std::string _customHomePageHtml;
+    };
+} // namespace SimpleEspConfigurator

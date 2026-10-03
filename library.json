@@ -1,0 +1,17 @@
+{
+  "name": "SimpleEspConfigurator",
+  "keywords": "configuration, setup, ota, ESP32, ESP8266, captive portal, Ethernet, wifi, access point",
+  "description": "A simple library for storing and loading settings on ESP32 and ESP8266 devices via web interface. It allows to start a captive portal and connect automatically to Wi-Fi and Ethernet. Supports custom parameters. Not a framework, but a library - fully modular.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tom-mi/simple-esp-configurator.git"
+  },
+  "version": "0.0.1",
+  "homepage": "https://github.com/to-mi/simple-esp-configurator",
+  "examples": "examples/*/**",
+  "frameworks": "arduino",
+  "platforms": [
+    "espressif8266",
+    "espressif32"
+  ]
+}
