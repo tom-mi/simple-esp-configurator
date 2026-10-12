@@ -13,6 +13,7 @@ namespace SimpleEspConfigurator {
      * @return True if connection was successful, false otherwise.
      */
     inline bool connectToEthernetSync(const NetworkParameters &netParams, const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) {
+        ETH.begin();
         if (!netParams.dhcp) {
             ETH.config(netParams.ip, netParams.gateway, netParams.subnet, netParams.dns1, netParams.dns2);
         } else if (!netParams.hostname.empty()) {
@@ -20,7 +21,6 @@ namespace SimpleEspConfigurator {
         }
         ESP_LOGI(SEC_LOG_TAG, "Connecting to Ethernet ...");
         const unsigned long startTime = millis();
-        ETH.begin();
 
         while (millis() - startTime < timeoutMs) {
             if (ETH.linkUp()) {

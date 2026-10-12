@@ -2,16 +2,25 @@
 
 set -euo pipefail
 
-REPO_ROOT="$(dirname ${BASH_SOURCE[0]})/.."
+REPO_ROOT="$(cd "$(dirname ${BASH_SOURCE[0]})/.." && pwd)"
 cd ${REPO_ROOT}
 
-TARGET="${1:?usage: scripts/test <esp32|offline>}"
+TARGET="${1:?usage: scripts/test <esp32|esp32-poe|offline>}"
 
 case ${TARGET} in
   esp32)
     pio run --environment test-e2e-esp32 --target upload
     pio run --environment test-e2e-ota-esp32
     cd e2e-tests
+    NETWORK_MODES=WIFI uv run pytest -m esp32
+    ;;
+  esp32-poe)
+    pio run --environment test-e2e-esp32-poe --target upload
+    pio run --environment test-e2e-ota-esp32-poe
+    cd e2e-tests
+    NETWORK_MODES=WIFI,ETH \
+    DEFAULT_FIRMWARE_ENV=test-e2e-esp32-poe \
+    OTA_FIRMWARE_PATH=${REPO_ROOT}/.pio/build/test-e2e-ota-esp32-poe/firmware.bin \
     uv run pytest -m esp32
     ;;
   offline)

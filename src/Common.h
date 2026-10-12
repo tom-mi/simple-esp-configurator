@@ -78,9 +78,5 @@ namespace SimpleEspConfigurator {
         [[nodiscard]] constexpr const char *c_str() const {
             return value;
         }
-
-        // [[nodiscard]] std::unique_ptr<std::string> to_string() const {
-        //     return std::make_unique<std::string>(value);
-        // }
     };
 } // namespace SimpleEspConfigurator

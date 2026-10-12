@@ -1,3 +1,4 @@
+import os
 from typing import Generator
 
 import pytest
@@ -28,14 +29,36 @@ def base_url(target_ip):
     return f'http://{target_ip}'
 
 
-@pytest.fixture(scope="session", autouse=True)
-def target_ip():
-    with open(ROOT_DIR / '.wifi.conf', 'r') as f:
+def _read_network_conf() -> dict[str, str]:
+    config = {}
+    with open(ROOT_DIR / '.network.conf', 'r') as f:
         for line in f:
             key, value = line.split('=', maxsplit=1)
-            if key.startswith('WIFI_IP'):
-                return value.strip()
-    raise ValueError('WIFI_IP not found in .wifi.conf, please fix')
+            config[key.strip()] = value.strip()
+    return config
+
+
+def _get_network_modes() -> list[str]:
+    return os.environ.get('NETWORK_MODES', 'WIFI').split(',')
+
+
+@pytest.fixture(scope="session", autouse=True, params=_get_network_modes())
+def target_ip(request: pytest.FixtureRequest):
+    network_mode = request.param
+    config = _read_network_conf()
+    ip_key = f'{network_mode}_ip'.upper()
+    if ip_key not in config:
+        raise ValueError(f'{ip_key} not found in .network.conf, please fix')
+    return config[ip_key]
+
+
+@pytest.fixture(scope="session")
+def network_mode(target_ip: str) -> str:
+    config = _read_network_conf()
+    for mode in _get_network_modes():
+        if config.get(f'{mode}_ip'.upper()) == target_ip:
+            return mode
+    raise ValueError(f'Network mode not found for IP {target_ip}')
 
 
 @pytest.fixture(scope='session')

@@ -1,6 +1,6 @@
 .idea
 .pio
-.wifi.conf
+.network.conf
 *.pyc
 __pycache__
 .venv

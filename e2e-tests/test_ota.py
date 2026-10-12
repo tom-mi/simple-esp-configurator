@@ -1,3 +1,4 @@
+import os
 import pathlib
 import subprocess
 from typing import Generator
@@ -13,21 +14,29 @@ ROOT_DIR = pathlib.Path(__file__).parent.parent.absolute()
 
 
 @pytest.fixture(scope="module")
-def default_firmware_path() -> pathlib.Path:
-    return ROOT_DIR / '.pio' / 'build' / 'test-e2e-esp32' / 'firmware.bin'
+def default_firmware_env() -> str:
+    return os.environ.get('DEFAULT_FIRMWARE_ENV', 'test-e2e-esp32')
+
+
+@pytest.fixture(scope="module")
+def default_firmware_path(default_firmware_env: str) -> pathlib.Path:
+    return ROOT_DIR / '.pio' / 'build' / default_firmware_env / 'firmware.bin'
 
 
 @pytest.fixture(scope="module")
 def ota_firmware_path() -> pathlib.Path:
-    return ROOT_DIR / '.pio' / 'build' / 'test-e2e-ota-esp32' / 'firmware.bin'
+    return pathlib.Path(os.environ.get(
+        'OTA_FIRMWARE_PATH',
+        str(ROOT_DIR / '.pio' / 'build' / 'test-e2e-ota-esp32' / 'firmware.bin'),
+    ))
 
 
 @pytest.fixture
-def restore_firmware_after_test(default_firmware_path: pathlib.Path) -> Generator[None, None, None]:
+def restore_firmware_after_test(default_firmware_env: str) -> Generator[None, None, None]:
     """Restore the original firmware after the test."""
     yield
     subprocess.check_call(
-        ['pio', 'run', '--environment', 'test-e2e-esp32', '--target', 'upload'],
+        ['pio', 'run', '--environment', default_firmware_env, '--target', 'upload'],
         cwd=ROOT_DIR,
     )
 

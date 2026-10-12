@@ -6,7 +6,9 @@ pytestmark = [pytest.mark.esp32]
 
 
 @pytest.mark.parametrize('domain', ['example.com', 'connectivitycheck.gstatic.com'])
-def test_dns_lookups_resolve_to_device_ip(target_ip: str, domain: str):
+def test_dns_lookups_resolve_to_device_ip(target_ip: str, domain: str, network_mode: str):
+    if network_mode == 'ETH':
+        pytest.skip('Captive portal not available on Ethernet')
     # given
     resolver = dns.resolver.Resolver()
     resolver.nameservers = [target_ip]
@@ -21,7 +23,9 @@ def test_dns_lookups_resolve_to_device_ip(target_ip: str, domain: str):
     assert target_ip in resolved_ips, f"Expected {target_ip} in {resolved_ips}"
 
 
-def test_non_existing_paths_return_home_page(page: Page, home_page, target_ip: str):
+def test_non_existing_paths_return_home_page(page: Page, home_page, target_ip: str, network_mode: str):
+    if network_mode == 'ETH':
+        pytest.skip('Captive portal not available on Ethernet')
     # when
     page.goto(f'http://{target_ip}/non-existing-path')
 
