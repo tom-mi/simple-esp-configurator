@@ -22,6 +22,7 @@
 using namespace SimpleEspConfigurator;
 
 static Configurator config;
+static DNSServer dnsServer;
 
 void setup() {
     esp_log_level_set("*", ESP_LOG_ERROR);
@@ -49,4 +50,5 @@ void setup() {
 
 void loop() {
     config.loop();
+    dnsServer.processNextRequest();
 }

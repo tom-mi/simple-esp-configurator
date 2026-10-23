@@ -161,8 +161,10 @@ namespace SimpleEspConfigurator {
 
         template<TemplateString defaultSSID = "", TemplateString defaultPassword = "">
         ApParameters apParameters() {
+            const auto apSsid = stringParameter<"ap_ssid", "AP SSID", defaultSSID, 0, 32>();
             return ApParameters(
-                stringParameter<"ap_ssid", "AP SSID", defaultSSID, 0, 32>(),
+                // fall back to device name if ssid is empty
+            apSsid.empty() ? _deviceName : apSsid,
                 passwordParameter<"ap_pass", "AP Password (empty for no encryption)", defaultPassword, 8, 63, false>()
             );
         }
@@ -195,16 +197,13 @@ namespace SimpleEspConfigurator {
 
         static bool startAp(const ApParameters &parameters);
 
-        bool startApWithCaptivePortal(const ApParameters &parameters);
+        bool startApWithCaptivePortal(const ApParameters &parameters, DNSServer &dnsServer);
 
-        void startCaptivePortal();
+        void startCaptivePortal(DNSServer &dnsServer);
 
         void loop() override;
 
         void enableOtaUpdate();
-
-    protected:
-        DNSServer _dnsServer;
 
     private:
         static constexpr auto DEFAULT_TIMEOUT_MS = 10000;

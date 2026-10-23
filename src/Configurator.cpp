@@ -41,7 +41,7 @@ bool Configurator::connectToWifiSync(const WiFiParameters &parameters,
 }
 
 bool Configurator::startAp(const ApParameters &parameters) {
-    ESP_LOGI(SEC_LOG_TAG, "Starting AP ...");
+    ESP_LOGI(SEC_LOG_TAG, "Starting AP: ssid=%s", parameters.ssid.c_str());
     bool result;
     if (parameters.password.empty()) {
         result = WiFi.softAP(parameters.ssid.c_str());
@@ -58,15 +58,15 @@ bool Configurator::startAp(const ApParameters &parameters) {
     return result;
 }
 
-bool Configurator::startApWithCaptivePortal(const ApParameters &parameters) {
+bool Configurator::startApWithCaptivePortal(const ApParameters &parameters, DNSServer &dnsServer) {
     if (startAp(parameters)) {
-        startCaptivePortal();
+        startCaptivePortal(dnsServer);
         return true;
     }
     return false;
 }
 
-void Configurator::startCaptivePortal() {
+void Configurator::startCaptivePortal(DNSServer &dnsServer) {
     ESP_LOGI(SEC_LOG_TAG, "Setting up captive portal ...");
     // See https://en.wikipedia.org/wiki/Captive_portal
     //
@@ -76,13 +76,15 @@ void Configurator::startCaptivePortal() {
     // Needed to trigger "Sign in to a Wi-Fi network" dialogue on android
     // reference: https://github.com/tzapu/WiFiManager/issues/553#issuecomment-910222676
     _server.onNotFound([this]() {
-        _server.send(200, "text/html", _renderHomePage().c_str());
+        _server.sendHeader("Location", "/");
+        _server.send(307, "text/html", "");
     });
 
-    if (_dnsServer.start(53, "*", WiFi.softAPIP())) {
-        ESP_LOGI(SEC_LOG_TAG, "Started captive portal DNS.");
+    const IPAddress ip = WiFi.softAPIP() ? WiFi.softAPIP() : WiFi.localIP(); // fallback mostly for testing
+    if (dnsServer.start(53, "*", ip)) {
+        ESP_LOGI(SEC_LOG_TAG, "Started captive portal DNS with ip %s", ip.toString().c_str());
     } else {
-        ESP_LOGW(SEC_LOG_TAG, "Failed to start captive portal DNS.");
+        ESP_LOGW(SEC_LOG_TAG, "Failed to start captive portal DNS with ip %s.", ip.toString().c_str());
     }
 }
 
@@ -133,7 +135,6 @@ std::string Configurator::_renderOtaPage() const {
 
 void Configurator::loop() {
     ConfiguratorCore::loop();
-    _dnsServer.processNextRequest();
 }
 
 void Configurator::enableOtaUpdate() {

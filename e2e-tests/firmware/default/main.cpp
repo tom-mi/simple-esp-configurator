@@ -28,6 +28,8 @@ using namespace SimpleEspConfigurator;
 #endif
 
 static Configurator config;
+static DNSServer dnsServer;
+
 
 void setup() {
     esp_log_level_set("*", ESP_LOG_ERROR);
@@ -42,7 +44,11 @@ void setup() {
         .gateway = IPAddress(WIFI_GW),
         .subnet = IPAddress(WIFI_SUBNET),
     };
-    config.connectToWifiSync(wifiParameters, networkParameters);
+    if (!config.connectToWifiSync(wifiParameters, networkParameters)) {
+        // No WiFi connection: start AP with captive portal for configuration
+        const ApParameters apParameters = config.apParameters<"e2e_ap", "e2e_pass">();
+        config.startApWithCaptivePortal(apParameters, dnsServer);
+    }
 
     // fields to be tested
     const auto str1 = config.stringParameter<"str1", "String", "abc", 3, 5, "", false>();
@@ -113,6 +119,7 @@ void setup() {
     });
     config.enableOtaUpdate();
     config.startWebServer();
+    config.startCaptivePortal(dnsServer);
 }
 
 void loop() {

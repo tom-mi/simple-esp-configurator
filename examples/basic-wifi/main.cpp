@@ -5,6 +5,7 @@
 using namespace SimpleEspConfigurator;
 
 static Configurator config;
+static DNSServer dnsServer;
 
 void setup() {
     esp_log_level_set("*", ESP_LOG_ERROR);
@@ -44,7 +45,7 @@ void setup() {
     // Blocks until the stored WiFi network is joined (or the timeout expires).
     if (!Configurator::connectToWifiSync(wifiParameters, wifiNetParams)) {
         // No Wi-Fi connection: start an access point with a captive portal for configuration.
-        config.startApWithCaptivePortal(apParameters);
+        config.startApWithCaptivePortal(apParameters, dnsServer);
     }
 
     // Allows updating the firmware over the air from a OTA subpage in the web portal.
