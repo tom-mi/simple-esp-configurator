@@ -6,3 +6,45 @@ REPO_ROOT="$(dirname ${BASH_SOURCE[0]})/.."
 cd ${REPO_ROOT}
 
 pio run
+
+baseline_env="example-empty-baseline"
+baseline_size=$(stat -c%s ".pio/build/${baseline_env}/firmware.bin")
+
+table_file="/tmp/opencode/example_table.md"
+
+{
+    echo "| Example | Size (bytes) | Delta to baseline (bytes) |"
+    echo "|---------|--------------:|---------------------------:|"
+    for env_dir in .pio/build/example-*/; do
+        env_name=$(basename "${env_dir}")
+        [[ "${env_name}" == "${baseline_env}" ]] && continue
+
+        size=$(stat -c%s "${env_dir}firmware.bin")
+        delta=$((size - baseline_size))
+        [[ ${delta} -gt 0 ]] && delta="+${delta}"
+
+        example_name="${env_name#example-}"
+        echo "| [${example_name}](./examples/${example_name}) | ${size} | ${delta} |"
+    done
+} > "${table_file}"
+
+python3 -c "
+import re
+
+with open('${table_file}') as f:
+    table = f.read().rstrip('\n')
+
+with open('README.md') as f:
+    content = f.read()
+
+start_marker = '<!-- START example table -->'
+end_marker = '<!-- END example table -->'
+
+pattern = re.escape(start_marker) + r'\n(.*?)' + re.escape(end_marker)
+replacement = start_marker + '\n' + table + '\n' + end_marker
+
+content = re.sub(pattern, replacement, content, flags=re.DOTALL)
+
+with open('README.md', 'w') as f:
+    f.write(content)
+"
