@@ -9,5 +9,10 @@ dependencies = [
     "pytest-rerunfailures>=16.7",
 ]
 
-[pytest]
+[tool.pytest.ini_options]
+markers = [
+    "esp32: requires a connected ESP32",
+    "esp8266: requires a connected ESP8266",
+    "offline: runs without a connected device",
+]
 reruns = 3

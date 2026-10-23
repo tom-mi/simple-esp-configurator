@@ -1,0 +1,18 @@
+originial:          1028988
+template factory:   1028840
+templating wip  :   1028468
+templating all fs:  1051416
+remove label field: 1055176 (revert)
+templating only fac:1030400
+remove ip check:    1030364
+move out label:     1030244
+
+more tests          1051836
+html escape         1052544
+refactorings        1052436
+
+(wip incomplete):   1055456
+(wip w/o ipv4 p):   1051896
+(wip w/o ipv4 len): 1048708
+
+

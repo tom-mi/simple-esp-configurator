@@ -1,6 +1,8 @@
 import pytest
 from playwright.sync_api import Page, expect
 
+pytestmark = [pytest.mark.esp32]
+
 
 def test_home_page_renders(home_page):
     # when

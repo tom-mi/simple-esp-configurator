@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -euo pipefail
+
+REPO_ROOT="$(dirname ${BASH_SOURCE[0]})/.."
+cd ${REPO_ROOT}
+
+TARGET="${1:?usage: scripts/test <esp32|esp8266|offline>}"
+
+case ${TARGET} in
+  esp32)
+    pio run --environment test-e2e-esp32 --target upload
+    cd e2e-tests
+    uv run pytest -m esp32
+    ;;
+  esp8266)
+    echo "esp8266 tests are not enabled yet (needs test-e2e-esp8266 env + firmware port)" >&2
+    exit 1
+    ;;
+  offline)
+    pio run
+    cd e2e-tests
+    uv run pytest -m offline
+    ;;
+  *)
+    echo "unknown target: ${TARGET}" >&2
+    exit 1
+    ;;
+esac

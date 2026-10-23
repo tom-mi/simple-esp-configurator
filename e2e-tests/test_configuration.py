@@ -1,6 +1,8 @@
 import pytest
 from playwright.sync_api import expect
 
+pytestmark = [pytest.mark.esp32]
+
 
 @pytest.fixture
 def clean_config(home_page):
