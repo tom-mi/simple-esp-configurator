@@ -2,9 +2,7 @@
 
 #include <esp_log.h>
 
-using namespace SimpleEspConfigurator;
-
-static Configurator config;
+static SimpleEspConfigurator::Configurator config;
 
 void setup() {
     esp_log_level_set("*", ESP_LOG_ERROR);
@@ -12,9 +10,9 @@ void setup() {
     Serial.begin(115200);
 
     const auto wifiParameters = config.wifiParameters();
-    const ApParameters apParameters = config.apParameters();
+    const auto apParameters = config.apParameters();
 
-    if (!connectToWifiSync(wifiParameters)) {
+    if (!config.connectToWifiSync(wifiParameters)) {
         startAp(apParameters);
     }
 

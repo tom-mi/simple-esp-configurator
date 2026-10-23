@@ -3,7 +3,14 @@
 #include "OtaUtil.h"
 #include "WifiUtil.h"
 
+constexpr auto DEFAULT_TIMEOUT_MS = 10000;
+
+
 namespace SimpleEspConfigurator {
+    /**
+     * Main entrypoint for the SimpleEspConfigurator.
+     * Subclasses ConfiguratorCore to provide higher-level methods for easy setup and additional features.
+     */
     class Configurator : public ConfiguratorCore {
     public:
         template<TemplateString id, TemplateString label, TemplateString defaultValue = "",
@@ -146,7 +153,7 @@ namespace SimpleEspConfigurator {
             const auto apSsid = stringParameter<"ap_ssid", "AP SSID", defaultSSID, 0, 32>();
             return ApParameters(
                 // fall back to device name if ssid is empty
-            apSsid.empty() ? _deviceName : apSsid,
+                apSsid.empty() ? _deviceName : apSsid,
                 passwordParameter<"ap_pass", "AP Password (empty for no encryption)", defaultPassword, 8, 63, false>()
             );
         }
@@ -172,5 +179,34 @@ namespace SimpleEspConfigurator {
             );
         }
 
+        /*
+         * Convenience methods for easy use (even though some of them could be static).
+         * The logic is intentionally moved to other files, so the compiler & linker can optimize for smaller binaries.
+         */
+
+        void enableOtaUpdate() {
+            SimpleEspConfigurator::enableOtaUpdate(*this);
+        }
+
+        bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams, // NOLINT(*-convert-member-functions-to-static)
+                               const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) {
+            return SimpleEspConfigurator::connectToWifiSync(parameters, netParams, timeoutMs);
+        }
+
+        bool connectToWifiSync(const WiFiParameters &parameters, const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) { // NOLINT(*-convert-member-functions-to-static)
+            return SimpleEspConfigurator::connectToWifiSync(parameters, timeoutMs);
+        }
+
+        bool startAp(const ApParameters &parameters) { // NOLINT(*-convert-member-functions-to-static)
+            return SimpleEspConfigurator::startAp(parameters);
+        }
+
+        bool startApWithCaptivePortal(const ApParameters &parameters, DNSServer &dnsServer) {
+            return SimpleEspConfigurator::startApWithCaptivePortal(*this, parameters, dnsServer);
+        }
+
+        void startCaptivePortal(DNSServer &dnsServer) {
+            SimpleEspConfigurator::startCaptivePortal(*this, dnsServer);
+        }
     };
 } // namespace SimpleEspConfigurator

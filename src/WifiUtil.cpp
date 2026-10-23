@@ -12,8 +12,7 @@ bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters
     return connectToWifiSync(parameters, timeoutMs);
 }
 
-bool connectToWifiSync(const WiFiParameters &parameters,
-                       const uint16_t timeoutMs) {
+bool connectToWifiSync(const WiFiParameters &parameters, const uint16_t timeoutMs) {
     if (parameters.ssid.empty()) {
         ESP_LOGI(SEC_LOG_TAG, "SSID empty, not connecting to WiFi.");
         return false;
@@ -57,7 +56,7 @@ bool startAp(const ApParameters &parameters) {
     return result;
 }
 
-bool startApWithCaptivePortal(Configurator &configurator, const ApParameters &parameters, DNSServer &dnsServer) {
+bool startApWithCaptivePortal(ConfiguratorCore &configurator, const ApParameters &parameters, DNSServer &dnsServer) {
     if (startAp(parameters)) {
         startCaptivePortal(configurator, dnsServer);
         return true;
@@ -65,7 +64,7 @@ bool startApWithCaptivePortal(Configurator &configurator, const ApParameters &pa
     return false;
 }
 
-void startCaptivePortal(Configurator &configurator, DNSServer &dnsServer) {
+void startCaptivePortal(ConfiguratorCore &configurator, DNSServer &dnsServer) {
     ESP_LOGI(SEC_LOG_TAG, "Setting up captive portal ...");
     // See https://en.wikipedia.org/wiki/Captive_portal
     //

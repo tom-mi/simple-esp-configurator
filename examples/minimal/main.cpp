@@ -19,9 +19,7 @@
 #define WIFI_GW "192.168.0.1"
 #endif
 
-using namespace SimpleEspConfigurator;
-
-static Configurator config;
+static SimpleEspConfigurator::Configurator config;
 
 void setup() {
     esp_log_level_set("*", ESP_LOG_ERROR);

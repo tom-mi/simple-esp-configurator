@@ -6,7 +6,7 @@ namespace SimpleEspConfigurator {
 
 // Handle the upload data chunk by chunk. No response is sent; this
 // function is used as the second callback for server.on().
-static void handleOtaUpload(Configurator &configurator) {
+static void handleOtaUpload(ConfiguratorCore &configurator) {
     auto *server = configurator.server();
     size_t fsize = UPDATE_SIZE_UNKNOWN;
     if (server->hasArg("size")) {
@@ -27,7 +27,7 @@ static void handleOtaUpload(Configurator &configurator) {
 
 // Finalize OTA, send response and reboot if successful. This function is used as the
 // first callback in server.on() for POST.
-static void handleOtaFinalize(Configurator &configurator) {
+static void handleOtaFinalize(ConfiguratorCore &configurator) {
     auto *server = configurator.server();
     if (Update.end(true)) {
         ESP_LOGI(SEC_LOG_TAG, "OTA update succeeded.");
@@ -41,7 +41,7 @@ static void handleOtaFinalize(Configurator &configurator) {
     }
 }
 
-static std::string renderOtaPage(const Configurator &configurator) {
+static std::string renderOtaPage(const ConfiguratorCore &configurator) {
     const std::string body =
             "<form method='post' enctype='multipart/form-data' action='/ota'"
             " onsubmit='return confirm(\"Overwrite firmware?\");'>\n"
@@ -51,7 +51,7 @@ static std::string renderOtaPage(const Configurator &configurator) {
     return configurator.renderPage("OTA update", body, "", true);
 }
 
-void enableOtaUpdate(Configurator &configurator) {
+void enableOtaUpdate(ConfiguratorCore &configurator) {
     auto *server = configurator.server();
     server->on("/update", HTTP_GET, [&configurator, server]() {
         server->send(200, "text/html", renderOtaPage(configurator).c_str());

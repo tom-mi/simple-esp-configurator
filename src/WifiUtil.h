@@ -3,8 +3,6 @@
 #include "ConfiguratorCore.h"
 
 namespace SimpleEspConfigurator {
-    class Configurator;
-
     struct WiFiParameters {
         std::string ssid;
         std::string password;
@@ -24,16 +22,13 @@ namespace SimpleEspConfigurator {
         IPAddress dns2;
     };
 
-    constexpr auto DEFAULT_TIMEOUT_MS = 10000;
+    bool connectToWifiSync(const WiFiParameters &parameters, uint16_t timeoutMs);
 
-    bool connectToWifiSync(const WiFiParameters &parameters, uint16_t timeoutMs = DEFAULT_TIMEOUT_MS);
-
-    bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams,
-                           uint16_t timeoutMs = DEFAULT_TIMEOUT_MS);
+    bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams, uint16_t timeoutMs);
 
     bool startAp(const ApParameters &parameters);
 
-    bool startApWithCaptivePortal(Configurator &configurator, const ApParameters &parameters, DNSServer &dnsServer);
+    bool startApWithCaptivePortal(ConfiguratorCore &configurator, const ApParameters &parameters, DNSServer &dnsServer);
 
-    void startCaptivePortal(Configurator &configurator, DNSServer &dnsServer);
+    void startCaptivePortal(ConfiguratorCore &configurator, DNSServer &dnsServer);
 } // namespace SimpleEspConfigurator

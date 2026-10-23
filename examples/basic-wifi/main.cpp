@@ -2,9 +2,7 @@
 
 #include <esp_log.h>
 
-using namespace SimpleEspConfigurator;
-
-static Configurator config;
+static SimpleEspConfigurator::Configurator config;
 static DNSServer dnsServer;
 
 void setup() {
@@ -40,16 +38,16 @@ void setup() {
     // initial setup (see below).
     const auto wifiParameters = config.wifiParameters();
     const auto wifiNetParams = config.networkParameters();
-    const ApParameters apParameters = config.apParameters();
+    const auto apParameters = config.apParameters();
 
     // Blocks until the stored Wi-Fi network is joined (or the timeout expires).
-    if (!connectToWifiSync(wifiParameters, wifiNetParams)) {
+    if (!config.connectToWifiSync(wifiParameters, wifiNetParams)) {
         // No Wi-Fi connection: start an access point with a captive portal for configuration.
-        startApWithCaptivePortal(config, apParameters, dnsServer);
+        config.startApWithCaptivePortal(apParameters, dnsServer);
     }
 
     // Allows updating the firmware over the air from a OTA subpage in the web portal.
-    enableOtaUpdate(config);
+    config.enableOtaUpdate();
 
     // Starts the web server that serves the config page.
     config.startWebServer();

@@ -9,8 +9,6 @@
 
 #include <esp_log.h>
 
-using namespace SimpleEspConfigurator;
-
 #ifndef WIFI_SSID
 #define WIFI_SSID ""
 #endif
@@ -27,7 +25,7 @@ using namespace SimpleEspConfigurator;
 #define WIFI_GW "192.168.0.1"
 #endif
 
-static Configurator config;
+static SimpleEspConfigurator::Configurator config;
 static DNSServer dnsServer;
 
 
@@ -38,15 +36,15 @@ void setup() {
 
     // Hardcoding the WiFi credentials & network setup to simplify the test setup.
     // We still test storing and retrieving credentials via the UI, just not passing those dynamically.
-    const WiFiParameters wifiParameters = {.ssid = WIFI_SSID, .password = WIFI_PASS};
-    const NetworkParameters networkParameters = {
+    const SimpleEspConfigurator::WiFiParameters wifiParameters = {.ssid = WIFI_SSID, .password = WIFI_PASS};
+    const SimpleEspConfigurator::NetworkParameters networkParameters = {
         .ip = IPAddress(WIFI_IP),
         .gateway = IPAddress(WIFI_GW),
         .subnet = IPAddress(WIFI_SUBNET),
     };
-    if (!connectToWifiSync(wifiParameters, networkParameters)) {
+    if (!config.connectToWifiSync(wifiParameters, networkParameters)) {
         // No WiFi connection: start AP with captive portal for configuration
-        const ApParameters apParameters = config.apParameters<"e2e_ap", "e2e_pass">();
+        const SimpleEspConfigurator::ApParameters apParameters = config.apParameters<"e2e_ap", "e2e_pass">();
         startApWithCaptivePortal(config, apParameters, dnsServer);
     }
 
