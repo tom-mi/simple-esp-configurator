@@ -1,10 +1,10 @@
 #pragma once
-#include "EspConfiguratorField.h"
+#include "ConfiguratorField.h"
 #include <string>
 
 namespace SimpleEspConfigurator {
 
-class BooleanField : public EspConfiguratorField {
+class BooleanField : public ConfiguratorField {
 public:
     const std::string TRUE_VALUE = "T";
 

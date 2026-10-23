@@ -2,19 +2,19 @@
 #include <cmath>
 #include <optional>
 
-#include "EspConfiguratorField.h"
+#include "ConfiguratorField.h"
 #include <string>
 #include <utility>
 
 namespace SimpleEspConfigurator {
 
 template<typename T>
-class NumberField : public EspConfiguratorField {
+class NumberField : public ConfiguratorField {
 public:
     NumberField(
         const std::string &id, std::string label, T defaultValue,
         T minValue, T maxValue, std::optional<T> step)
-        : EspConfiguratorField(id),
+        : ConfiguratorField(id),
           _label(std::move(label)),
           _defaultValue(defaultValue),
           _minValue(minValue), _maxValue(maxValue), _step(step),

@@ -5,7 +5,7 @@
 // TODO make this Esp8266 compatible
 #include <WebServer.h>
 
-#include "EspConfigurator_common.h"
+#include "Common.h"
 
 #include "BooleanField.h"
 #include "CustomHtmlField.h"
@@ -45,7 +45,7 @@ namespace SimpleEspConfigurator {
          */
         static void reset();
 
-        void addField(EspConfiguratorField *field) {
+        void addField(ConfiguratorField *field) {
             _fields.push_back(field);
         }
 
@@ -70,7 +70,7 @@ namespace SimpleEspConfigurator {
         WebServer _server;
 
     private:
-        std::vector<EspConfiguratorField *> _fields;
+        std::vector<ConfiguratorField *> _fields;
 
         // Menu system: list of navigation items.
         struct MenuItem {

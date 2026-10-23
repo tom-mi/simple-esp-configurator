@@ -1,5 +1,5 @@
 #pragma once
-#include "EspConfiguratorField.h"
+#include "ConfiguratorField.h"
 #include <functional>
 
 namespace SimpleEspConfigurator {
@@ -9,10 +9,10 @@ namespace SimpleEspConfigurator {
      * The field renders a provided HTML snippet. When a form value is posted for
      * this field, the optional callback is invoked with the raw value.
      */
-    class CustomHtmlField : public EspConfiguratorField {
+    class CustomHtmlField : public ConfiguratorField {
     public:
         CustomHtmlField(const std::string &id, std::string html)
-            : EspConfiguratorField(id), _html(std::move(html)) {
+            : ConfiguratorField(id), _html(std::move(html)) {
         }
 
         void setValueFromForm(const std::string &formVal) override {

@@ -1,10 +1,10 @@
 #pragma once
-#include "EspConfiguratorField.h"
+#include "ConfiguratorField.h"
 #include <string>
 
 namespace SimpleEspConfigurator {
 
-class StringField : public EspConfiguratorField {
+class StringField : public ConfiguratorField {
 public:
     StringField(
         const std::string &id, std::string label,

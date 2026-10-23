@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "EspConfigurator_common.h"
+#include "Common.h"
 
 namespace SimpleEspConfigurator {
     static auto RESTART_DELAY_MS = 500;

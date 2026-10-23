@@ -4,12 +4,12 @@
 // IPAddress type used for IPv4 configuration values.
 // It is defined in the Arduino core headers; including <WiFi.h> pulls it in.
 
-class EspConfiguratorField {
+class ConfiguratorField {
 public:
-  EspConfiguratorField(std::string id)
+  ConfiguratorField(std::string id)
       : _id(std::move(id)) {}
 
-  virtual ~EspConfiguratorField() = default;
+  virtual ~ConfiguratorField() = default;
 
   const std::string _id;
 

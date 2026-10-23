@@ -4,7 +4,7 @@
 #include <utility>
 
 // ReSharper disable once CppUnusedIncludeDirective - needed for log tag
-#include "EspConfigurator_common.h"
+#include "Common.h"
 
 namespace SimpleEspConfigurator {
 
@@ -12,7 +12,7 @@ static Preferences prefs;
 
 BooleanField::BooleanField(
     const std::string &id, std::string label, const bool defaultValue)
-    : EspConfiguratorField(id), _label(std::move(label)), _defaultValue(defaultValue),
+    : ConfiguratorField(id), _label(std::move(label)), _defaultValue(defaultValue),
       _value(defaultValue) {}
 
 void BooleanField::setValueFromForm(

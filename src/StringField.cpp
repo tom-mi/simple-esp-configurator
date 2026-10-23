@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <utility>
 
-#include "EspConfigurator_common.h"
+#include "Common.h"
 
 namespace SimpleEspConfigurator {
 
@@ -16,7 +16,7 @@ StringField::StringField(
     const std::string &id, std::string label,
     const std::string &defaultValue, const int minLen, const int maxLen,
     const bool password, std::string pattern, const bool required)
-    : EspConfiguratorField(id), _label(std::move(label)), _defaultValue(defaultValue),
+    : ConfiguratorField(id), _label(std::move(label)), _defaultValue(defaultValue),
       _minLen(minLen), _maxLen(maxLen), _password(password), _pattern(std::move(pattern)),
       _required(required), _value(defaultValue),
       _passwordPlaceholder(minLen > 0 ? std::string(minLen, '*') : "***") {

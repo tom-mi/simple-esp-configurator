@@ -2,7 +2,7 @@
 
 #include <Preferences.h>
 
-#include "EspConfigurator_common.h"
+#include "Common.h"
 
 namespace SimpleEspConfigurator {
 
