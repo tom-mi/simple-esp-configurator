@@ -1,27 +1,9 @@
 #pragma once
-#include <DNSServer.h>
 #include "ConfiguratorCore.h"
+#include "OtaUtil.h"
+#include "WifiUtil.h"
 
 namespace SimpleEspConfigurator {
-    struct WiFiParameters {
-        std::string ssid;
-        std::string password;
-    };
-
-    struct ApParameters {
-        std::string ssid;
-        std::string password;
-    };
-
-    struct NetworkParameters {
-        bool dhcp;
-        IPAddress ip;
-        IPAddress gateway;
-        IPAddress subnet;
-        IPAddress dns1;
-        IPAddress dns2;
-    };
-
     class Configurator : public ConfiguratorCore {
     public:
         template<TemplateString id, TemplateString label, TemplateString defaultValue = "",
@@ -190,33 +172,5 @@ namespace SimpleEspConfigurator {
             );
         }
 
-        static bool startAp(const ApParameters &parameters);
-
-        bool startApWithCaptivePortal(const ApParameters &parameters, DNSServer &dnsServer);
-
-        void startCaptivePortal(DNSServer &dnsServer);
-
-        void loop() override;
-
-        void enableOtaUpdate();
-
-    private:
-        bool _isOtaUpdateEnabled = true;
-
-        // Page rendering for OTA upload form.
-        [[nodiscard]] std::string _renderOtaPage() const;
-
-        // Upload data chunk handler for OTA.
-        void _handleOtaUpload();
-
-        // Finalize OTA upload and reboot.
-        void _handleOtaFinalize();
     };
-
-    constexpr auto DEFAULT_TIMEOUT_MS = 10000;
-
-    bool connectToWifiSync(const WiFiParameters &parameters, uint16_t timeoutMs = DEFAULT_TIMEOUT_MS);
-
-    bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams,
-                           uint16_t timeoutMs = DEFAULT_TIMEOUT_MS);
 } // namespace SimpleEspConfigurator

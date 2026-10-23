@@ -15,7 +15,7 @@ void setup() {
     const ApParameters apParameters = config.apParameters();
 
     if (!connectToWifiSync(wifiParameters)) {
-        Configurator::startAp(apParameters);
+        startAp(apParameters);
     }
 
     config.startWebServer();

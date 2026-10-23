@@ -42,14 +42,14 @@ void setup() {
     const auto wifiNetParams = config.networkParameters();
     const ApParameters apParameters = config.apParameters();
 
-    // Blocks until the stored WiFi network is joined (or the timeout expires).
+    // Blocks until the stored Wi-Fi network is joined (or the timeout expires).
     if (!connectToWifiSync(wifiParameters, wifiNetParams)) {
         // No Wi-Fi connection: start an access point with a captive portal for configuration.
-        config.startApWithCaptivePortal(apParameters, dnsServer);
+        startApWithCaptivePortal(config, apParameters, dnsServer);
     }
 
     // Allows updating the firmware over the air from a OTA subpage in the web portal.
-    config.enableOtaUpdate();
+    enableOtaUpdate(config);
 
     // Starts the web server that serves the config page.
     config.startWebServer();

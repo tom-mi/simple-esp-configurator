@@ -91,7 +91,7 @@ namespace SimpleEspConfigurator {
         _server.on("/config", HTTP_POST, [this]() {
             if (_saveConfigFromForm()) {
                 _server.send(200, "text/html",
-                             _renderRebootPage("Configuration stored.").c_str());
+                             renderRebootPage("Configuration stored.").c_str());
                 delay(RESTART_DELAY_MS);
                 ESP.restart(); // TODO make 8266 compatible
             } else {
@@ -100,7 +100,7 @@ namespace SimpleEspConfigurator {
         });
         // Reboot endpoint
         _server.on("/reboot", HTTP_POST, [this]() {
-            _server.send(200, "text/html", _renderRebootPage("").c_str());
+            _server.send(200, "text/html", renderRebootPage("").c_str());
             delay(RESTART_DELAY_MS);
             reboot();
         });
@@ -108,7 +108,7 @@ namespace SimpleEspConfigurator {
         _server.on("/reset", HTTP_POST, [this]() {
             _erasePreferences();
             _server.send(200, "text/html",
-                         _renderRebootPage("Configuration has been reset.").c_str());
+                         renderRebootPage("Configuration has been reset.").c_str());
             delay(RESTART_DELAY_MS);
             reboot();
         });
@@ -157,7 +157,7 @@ namespace SimpleEspConfigurator {
         return renderPage("Configuration", body);
     }
 
-    std::string ConfiguratorCore::_renderRebootPage(
+    std::string ConfiguratorCore::renderRebootPage(
         const std::string &message) const {
         const std::string extraHead =
                 "<meta http-equiv='refresh' content='2;url=/' />\n";

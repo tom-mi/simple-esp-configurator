@@ -56,11 +56,11 @@ namespace SimpleEspConfigurator {
                                              const std::string &extraHead = "",
                                              bool backButton = true) const;
 
+        [[nodiscard]] std::string renderRebootPage(const std::string &message) const;
+
     protected:
         [[nodiscard]] std::string
         _renderConfigPage(bool hasValidationError = false) const;
-
-        [[nodiscard]] std::string _renderRebootPage(const std::string &message) const;
 
         [[nodiscard]] std::string _renderHomePage() const;
 
