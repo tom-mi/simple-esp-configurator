@@ -43,7 +43,7 @@ void setup() {
     const ApParameters apParameters = config.apParameters();
 
     // Blocks until the stored WiFi network is joined (or the timeout expires).
-    if (!Configurator::connectToWifiSync(wifiParameters, wifiNetParams)) {
+    if (!connectToWifiSync(wifiParameters, wifiNetParams)) {
         // No Wi-Fi connection: start an access point with a captive portal for configuration.
         config.startApWithCaptivePortal(apParameters, dnsServer);
     }

@@ -44,7 +44,7 @@ void setup() {
         .gateway = IPAddress(WIFI_GW),
         .subnet = IPAddress(WIFI_SUBNET),
     };
-    if (!config.connectToWifiSync(wifiParameters, networkParameters)) {
+    if (!connectToWifiSync(wifiParameters, networkParameters)) {
         // No WiFi connection: start AP with captive portal for configuration
         const ApParameters apParameters = config.apParameters<"e2e_ap", "e2e_pass">();
         config.startApWithCaptivePortal(apParameters, dnsServer);

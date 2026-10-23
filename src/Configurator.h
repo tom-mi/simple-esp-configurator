@@ -190,11 +190,6 @@ namespace SimpleEspConfigurator {
             );
         }
 
-        static bool connectToWifiSync(const WiFiParameters &parameters, uint16_t timeoutMs = DEFAULT_TIMEOUT_MS);
-
-        static bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams,
-                                      uint16_t timeoutMs = DEFAULT_TIMEOUT_MS);
-
         static bool startAp(const ApParameters &parameters);
 
         bool startApWithCaptivePortal(const ApParameters &parameters, DNSServer &dnsServer);
@@ -206,7 +201,6 @@ namespace SimpleEspConfigurator {
         void enableOtaUpdate();
 
     private:
-        static constexpr auto DEFAULT_TIMEOUT_MS = 10000;
         bool _isOtaUpdateEnabled = true;
 
         // Page rendering for OTA upload form.
@@ -218,4 +212,11 @@ namespace SimpleEspConfigurator {
         // Finalize OTA upload and reboot.
         void _handleOtaFinalize();
     };
+
+    constexpr auto DEFAULT_TIMEOUT_MS = 10000;
+
+    bool connectToWifiSync(const WiFiParameters &parameters, uint16_t timeoutMs = DEFAULT_TIMEOUT_MS);
+
+    bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams,
+                           uint16_t timeoutMs = DEFAULT_TIMEOUT_MS);
 } // namespace SimpleEspConfigurator
