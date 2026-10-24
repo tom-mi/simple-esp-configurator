@@ -166,7 +166,8 @@ namespace SimpleEspConfigurator {
             const TemplateString defaultGateway = "192.168.0.1",
             const TemplateString defaultSubnet = "255.255.255.0",
             const TemplateString defaultDns1 = "",
-            const TemplateString defaultDns2 = ""
+            const TemplateString defaultDns2 = "",
+            const TemplateString defaultHostname = ""
         >
         NetworkParameters networkParameters() {
             return NetworkParameters(
@@ -175,7 +176,8 @@ namespace SimpleEspConfigurator {
                 ipv4Parameter<idPrefix + "gw", label + " Gateway", defaultGateway>(),
                 ipv4Parameter<idPrefix + "sub", label + " Subnet", defaultSubnet>(),
                 ipv4Parameter<idPrefix + "dns1", label + " DNS1", defaultDns1, false>(),
-                ipv4Parameter<idPrefix + "dns2", label + " DNS2", defaultDns2, false>()
+                ipv4Parameter<idPrefix + "dns2", label + " DNS2", defaultDns2, false>(),
+                stringParameter<idPrefix + "host", label + " DHCP Hostname", defaultHostname, 0, 63, "", false>()
             );
         }
 

@@ -23,9 +23,9 @@ See the [examples](./examples):
 <!-- START example table -->
 | Example | Size (bytes) | Delta to baseline (bytes) |
 |---------|--------------:|---------------------------:|
-| [basic-wifi](./examples/basic-wifi) | 1048224 | +123312 |
+| [basic-wifi](./examples/basic-wifi) | 1048768 | +123856 |
 | [minimal](./examples/minimal) | 1008208 | +83296 |
-| [minimal-wifi](./examples/minimal-wifi) | 1013104 | +88192 |
+| [minimal-wifi](./examples/minimal-wifi) | 1013232 | +88320 |
 <!-- END example table -->
 
 ## Configuration reference

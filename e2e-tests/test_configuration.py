@@ -39,6 +39,7 @@ def default_form_dict():
         'net1_sub': '255.255.0.0',
         'net1_dns1': '1.2.3.4',
         'net1_dns2': '5.6.7.8',
+        'net1_host': 'my-hostname',
     }
 
 
@@ -87,6 +88,7 @@ def test_default_values(clean_config, config_page, field_page):
     expect(config_page.field('MyNetwork Subnet')).to_have_value('255.255.0.0')
     expect(config_page.field('MyNetwork DNS1')).to_have_value('1.2.3.4')
     expect(config_page.field('MyNetwork DNS2')).to_have_value('5.6.7.8')
+    expect(config_page.field('MyNetwork DHCP Hostname')).to_have_value('my-hostname')
 
     # when
     field_page.goto()
@@ -117,6 +119,7 @@ def test_default_values(clean_config, config_page, field_page):
     expect(field_page.field_value('net1_sub')).to_have_text('255.255.0.0')
     expect(field_page.field_value('net1_dns1')).to_have_text('1.2.3.4')
     expect(field_page.field_value('net1_dns2')).to_have_text('5.6.7.8')
+    expect(field_page.field_value('net1_host')).to_have_text('my-hostname')
 
 
 def test_set_values(clean_config, config_page, home_page, field_page):
@@ -152,6 +155,7 @@ def test_set_values(clean_config, config_page, home_page, field_page):
     config_page.field('MyNetwork Subnet').fill('255.255.255.0')
     config_page.field('MyNetwork DNS1').fill('8.8.8.8')
     config_page.field('MyNetwork DNS2').fill('8.8.4.4')
+    config_page.field('MyNetwork DHCP Hostname').fill('new-hostname')
     config_page.submit_button().click()
 
     # then
@@ -190,6 +194,7 @@ def test_set_values(clean_config, config_page, home_page, field_page):
     expect(config_page.field('MyNetwork Subnet')).to_have_value('255.255.255.0')
     expect(config_page.field('MyNetwork DNS1')).to_have_value('8.8.8.8')
     expect(config_page.field('MyNetwork DNS2')).to_have_value('8.8.4.4')
+    expect(config_page.field('MyNetwork DHCP Hostname')).to_have_value('new-hostname')
 
     # when
     field_page.goto()
@@ -223,6 +228,7 @@ def test_set_values(clean_config, config_page, home_page, field_page):
     expect(field_page.field_value('net1_sub')).to_have_text('255.255.255.0')
     expect(field_page.field_value('net1_dns1')).to_have_text('8.8.8.8')
     expect(field_page.field_value('net1_dns2')).to_have_text('8.8.4.4')
+    expect(field_page.field_value('net1_host')).to_have_text('new-hostname')
 
 
 @pytest.mark.parametrize('value', [

@@ -20,6 +20,7 @@ namespace SimpleEspConfigurator {
         IPAddress subnet;
         IPAddress dns1;
         IPAddress dns2;
+        std::string hostname;
     };
 
     bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams, uint16_t timeoutMs);

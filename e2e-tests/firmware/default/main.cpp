@@ -70,7 +70,8 @@ void setup() {
     const auto net1 = config.networkParameters<
         false, "net1_", "MyNetwork",
         "192.168.10.2", "192.168.10.1", "255.255.0.0",
-        "1.2.3.4", "5.6.7.8"
+        "1.2.3.4", "5.6.7.8",
+        "my-hostname"
     >();
     config.customHtmlParameter<
         "custom1",
@@ -103,6 +104,7 @@ void setup() {
     fieldBody += "<tr><td>net1_sub</td><td>" + std::string(net1.subnet.toString().c_str()) + "</td></tr>";
     fieldBody += "<tr><td>net1_dns1</td><td>" + std::string(net1.dns1.toString().c_str()) + "</td></tr>";
     fieldBody += "<tr><td>net1_dns2</td><td>" + std::string(net1.dns2.toString().c_str()) + "</td></tr>";
+    fieldBody += "<tr><td>net1_host</td><td>" + net1.hostname + "</td></tr>";
     fieldBody += "</table>";
     const auto fieldResponse = config.renderPage("Fields", fieldBody);
 
