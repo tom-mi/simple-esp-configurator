@@ -150,7 +150,7 @@ namespace SimpleEspConfigurator {
 
         template<TemplateString defaultSSID = "", TemplateString defaultPassword = "">
         ApParameters apParameters() {
-            const auto apSsid = stringParameter<"ap_ssid", "AP SSID", defaultSSID, 0, 32>();
+            const auto apSsid = stringParameter<"ap_ssid", "AP SSID", defaultSSID, 0, 32, "", false>();
             return ApParameters(
                 // fall back to device name if ssid is empty
                 apSsid.empty() ? _deviceName : apSsid,
