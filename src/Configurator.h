@@ -194,7 +194,8 @@ namespace SimpleEspConfigurator {
         }
 
         bool connectToWifiSync(const WiFiParameters &parameters, const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) { // NOLINT(*-convert-member-functions-to-static)
-            return SimpleEspConfigurator::connectToWifiSync(parameters, timeoutMs);
+            const auto netParams = NetworkParameters { .dhcp = true };
+            return SimpleEspConfigurator::connectToWifiSync(parameters, netParams, timeoutMs);
         }
 
         bool startAp(const ApParameters &parameters) { // NOLINT(*-convert-member-functions-to-static)

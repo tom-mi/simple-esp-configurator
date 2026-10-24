@@ -22,8 +22,6 @@ namespace SimpleEspConfigurator {
         IPAddress dns2;
     };
 
-    bool connectToWifiSync(const WiFiParameters &parameters, uint16_t timeoutMs);
-
     bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams, uint16_t timeoutMs);
 
     bool startAp(const ApParameters &parameters);

@@ -9,10 +9,6 @@ bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters
     if (!netParams.dhcp) {
         WiFi.config(netParams.ip, netParams.gateway, netParams.subnet, netParams.dns1, netParams.dns2);
     }
-    return connectToWifiSync(parameters, timeoutMs);
-}
-
-bool connectToWifiSync(const WiFiParameters &parameters, const uint16_t timeoutMs) {
     if (parameters.ssid.empty()) {
         ESP_LOGI(SEC_LOG_TAG, "SSID empty, not connecting to WiFi.");
         return false;
