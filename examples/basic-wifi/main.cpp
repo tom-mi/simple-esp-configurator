@@ -40,6 +40,10 @@ void setup() {
     const auto wifiNetParams = config.networkParameters();
     const auto apParameters = config.apParameters();
 
+    // configurable admin password for web server (defaults to no password)
+    const auto adminPassword = config.passwordParameter<"pw", "Admin Password", "", -1, -1, false>();
+    config.setAdminPassword(adminPassword);
+
     // Blocks until the stored Wi-Fi network is joined (or the timeout expires).
     if (!config.connectToWifiSync(wifiParameters, wifiNetParams)) {
         // No Wi-Fi connection: start an access point with a captive portal for configuration.

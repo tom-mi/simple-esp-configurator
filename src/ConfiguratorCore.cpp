@@ -1,5 +1,6 @@
 #include "ConfiguratorCore.h"
 #include <Preferences.h>
+#include <base64.h>
 
 #include <memory>
 
@@ -47,6 +48,8 @@ namespace SimpleEspConfigurator {
             "</body>\n"
             "</html>\n";
 
+    constexpr auto ADMIN_USER_PREFIX = "admin:";
+
 
     bool ConfiguratorCore::_saveConfigFromForm() const {
         bool allValid = true;
@@ -71,13 +74,30 @@ namespace SimpleEspConfigurator {
     }
 
     void ConfiguratorCore::addMenuItem(const std::string &path,
-                                       const std::string &label) {
+                                       const std::string &label,
+                                       const bool admin) {
         for (const auto &itm: _menu) {
             if (itm.path == path) {
                 return;
             }
         }
-        _menu.push_back({.path = path, .label = label});
+        _menu.push_back({.path = path, .label = label, .admin = admin});
+    }
+
+    void ConfiguratorCore::setAdminPassword(const std::string &pw) {
+        _adminPw = pw;
+    }
+
+    bool ConfiguratorCore::_isRequestAuthenticated() const {
+        if (_adminPw.empty()) {
+            return true;
+        }
+        const auto expected = "Basic " + base64::encode(ADMIN_USER_PREFIX + String(_adminPw.c_str()));
+        return _server.header("Authorization") == expected;
+    }
+
+    void ConfiguratorCore::_requestAuthentication() {
+        _server.requestAuthentication();
     }
 
     void ConfiguratorCore::startWebServer() {
@@ -85,13 +105,28 @@ namespace SimpleEspConfigurator {
         _server.on("/", HTTP_GET, [this]() {
             _server.send(200, "text/html", _renderHomePage().c_str());
         });
+        _server.on("/login", HTTP_POST, [this]() {
+            if (_isRequestAuthenticated()) {
+                _server.send(200, "text/html", renderRedirectToHomePage("Logged in.").c_str());
+            } else {
+                _requestAuthentication();
+            }
+        });
         _server.on("/config", HTTP_GET, [this]() {
+            if (!_isRequestAuthenticated()) {
+                _requestAuthentication();
+                return;
+            }
             _server.send(200, "text/html", _renderConfigPage(false).c_str());
         });
         _server.on("/config", HTTP_POST, [this]() {
+            if (!_isRequestAuthenticated()) {
+                _requestAuthentication();
+                return;
+            }
             if (_saveConfigFromForm()) {
                 _server.send(200, "text/html",
-                             renderRebootPage("Configuration stored.").c_str());
+                             renderRedirectToHomePage("Configuration stored. Rebooting ...").c_str());
                 delay(RESTART_DELAY_MS);
                 ESP.restart(); // TODO make 8266 compatible
             } else {
@@ -100,15 +135,23 @@ namespace SimpleEspConfigurator {
         });
         // Reboot endpoint
         _server.on("/reboot", HTTP_POST, [this]() {
-            _server.send(200, "text/html", renderRebootPage("").c_str());
+            if (!_isRequestAuthenticated()) {
+                _requestAuthentication();
+                return;
+            }
+            _server.send(200, "text/html", renderRedirectToHomePage("Rebooting ...").c_str());
             delay(RESTART_DELAY_MS);
             reboot();
         });
         // Reset endpoint – clears preferences then reboots
         _server.on("/reset", HTTP_POST, [this]() {
+            if (!_isRequestAuthenticated()) {
+                _requestAuthentication();
+                return;
+            }
             _erasePreferences();
             _server.send(200, "text/html",
-                         renderRebootPage("Configuration has been reset.").c_str());
+                         renderRedirectToHomePage("Configuration has been reset. Rebooting ...").c_str());
             delay(RESTART_DELAY_MS);
             reboot();
         });
@@ -157,31 +200,40 @@ namespace SimpleEspConfigurator {
         return renderPage("Configuration", body);
     }
 
-    std::string ConfiguratorCore::renderRebootPage(
+    std::string ConfiguratorCore::renderRedirectToHomePage(
         const std::string &message) const {
         const std::string extraHead =
                 "<meta http-equiv='refresh' content='2;url=/' />\n";
         const std::string body = "<p>" + message + "</p>\n" +
-                                 "<p>Rebooting ...</p>\n" +
                                  "<p>You will be redirected to the start page.</p>\n";
         return renderPage("", body, extraHead, false);
     }
 
-    std::string ConfiguratorCore::_renderHomePage() const {
+    std::string ConfiguratorCore::_renderHomePage() {
         std::string body = _customHomePageHtml;
-        for (const auto &[path, label]: _menu) {
+        for (const auto &[path, label, admin]: _menu) {
+            if (admin && !_isRequestAuthenticated()) {
+                continue;
+            }
             body += "<div class='item'><form action='" + path + "'>\n";
             body += "  <button type='submit'>" + label + "</button>\n";
             body += "</form></div>\n";
         }
-        body += "<div class='item'><form action='/reboot' method='post'>\n";
-        body += "  <button type='submit'>Reboot</button>\n";
-        body += "</form></div>\n";
-        body += "<div class='item'><form action='/reset' method='post'";
-        body += " onsubmit='return confirm(\"Erase config?\");'>\n";
-        body += "  <button class='danger' type='submit'>Reset configuration & "
-                "reboot</button>\n";
-        body += "</form></div>\n";
+        if (_isRequestAuthenticated()) {
+            body += "<div class='item'><form action='/reboot' method='post'>\n";
+            body += "  <button type='submit'>Reboot</button>\n";
+            body += "</form></div>\n";
+            body += "<div class='item'><form action='/reset' method='post'";
+            body += " onsubmit='return confirm(\"Erase config?\");'>\n";
+            body += "  <button class='danger' type='submit'>Reset configuration & "
+                    "reboot</button>\n";
+            body += "</form></div>\n";
+        }
+        if (!_isRequestAuthenticated()) {
+            body += "<div class='item'><form action='/login' method='post'>\n";
+            body += "  <button type='submit'>Login</button>\n";
+            body += "</form></div>\n";
+        }
         return renderPage("", body, "", false);
     }
 

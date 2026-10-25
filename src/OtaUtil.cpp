@@ -32,7 +32,7 @@ static void handleOtaFinalize(ConfiguratorCore &configurator) {
     if (Update.end(true)) {
         ESP_LOGI(SEC_LOG_TAG, "OTA update succeeded.");
         // Redirect to home after a short delay
-        server->send(200, "text/html", configurator.renderRebootPage("OTA update succeeded.").c_str());
+        server->send(200, "text/html", configurator.renderRedirectToHomePage("OTA update succeeded. Rebooting ...").c_str());
         delay(500);
         ESP.restart();
     } else {
@@ -54,10 +54,20 @@ static std::string renderOtaPage(const ConfiguratorCore &configurator) {
 void enableOtaUpdate(ConfiguratorCore &configurator) {
     auto *server = configurator.server();
     server->on("/update", HTTP_GET, [&configurator, server]() {
+        if (!configurator._isRequestAuthenticated()) {
+            server->sendHeader("WWW-Authenticate", "Basic realm=\"OTA Update\"");
+            server->send(401);
+            return;
+        }
         server->send(200, "text/html", renderOtaPage(configurator).c_str());
     });
     // Separate callbacks: first sends response after upload, second processes upload data
     server->on("/update", HTTP_POST, [&configurator]() {
+                       if (!configurator._isRequestAuthenticated()) {
+                           configurator.server()->sendHeader("WWW-Authenticate", "Basic realm=\"OTA Update\"");
+                           configurator.server()->send(401);
+                           return;
+                       }
                        handleOtaFinalize(configurator);
                    }, [&configurator]() {
                        handleOtaUpload(configurator);
