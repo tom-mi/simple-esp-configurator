@@ -2,6 +2,13 @@
 #include "ConfiguratorCore.h"
 #include "OtaUtil.h"
 #include "WifiUtil.h"
+#include "BooleanField.h"
+#include "CustomHtmlField.h"
+#include "IPv4AddressField.h"
+#include "NumberField.h"
+#include "StringField.h"
+
+#include "Common.h"
 
 constexpr auto DEFAULT_TIMEOUT_MS = 10000;
 

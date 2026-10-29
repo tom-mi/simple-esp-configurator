@@ -5,13 +5,7 @@
 // TODO make this Esp8266 compatible
 #include <WebServer.h>
 
-#include "Common.h"
-
-#include "BooleanField.h"
-#include "CustomHtmlField.h"
-#include "IPv4AddressField.h"
-#include "NumberField.h"
-#include "StringField.h"
+#include "ConfiguratorField.h"
 
 namespace SimpleEspConfigurator {
     class ConfiguratorCore {
