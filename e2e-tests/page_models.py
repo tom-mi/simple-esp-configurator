@@ -95,3 +95,21 @@ class FieldPage(BasePage):
 
     def field_value(self, key: str) -> Locator:
         return self.page.locator(f'xpath=//tr[td[1]="{key}"]/td[2]')
+
+
+class OtaPage(BasePage):
+    def __init__(self, page: Page, device_name: str):
+        super().__init__(page, '/update', device_name, subtitle='OTA update')
+
+    def file_input(self):
+        return self.page.locator('input[type="file"]')
+
+    def upload_button(self):
+        return self.page.get_by_text('Upload')
+
+    def upload_firmware(self, firmware_path: str):
+        self.goto()
+        self.file_input().set_input_files(firmware_path)
+        # handle the confirm dialog
+        self.page.once('dialog', lambda dialog: dialog.accept())
+        self.upload_button().click()

@@ -10,6 +10,7 @@ TARGET="${1:?usage: scripts/test <esp32|esp8266|offline>}"
 case ${TARGET} in
   esp32)
     pio run --environment test-e2e-esp32 --target upload
+    pio run --environment test-e2e-ota-esp32
     cd e2e-tests
     uv run pytest -m esp32
     ;;

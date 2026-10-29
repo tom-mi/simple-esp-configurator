@@ -119,9 +119,9 @@ void setup() {
     config.server()->on("/fields", [server, fieldResponse] {
         server->send(200, "text/html", fieldResponse.c_str());
     });
-    enableOtaUpdate(config);
+    config.enableOtaUpdate();
     config.startWebServer();
-    startCaptivePortal(config, dnsServer);
+    config.startCaptivePortal(dnsServer);
 }
 
 void loop() {
