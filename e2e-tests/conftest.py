@@ -38,7 +38,7 @@ def target_ip():
     raise ValueError('WIFI_IP not found in .wifi.conf, please fix')
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def device_name():
     return 'e2e-testing'
 
@@ -63,3 +63,16 @@ def api_request_context(playwright: Playwright, base_url: str) -> Generator[APIR
     request_context = playwright.request.new_context(base_url=base_url)
     yield request_context
     request_context.dispose()
+
+
+@pytest.fixture(autouse=True)
+def wait_for_device(api_request_context: APIRequestContext):
+    for _ in range(200):
+        try:
+            api_request_context.get('/', timeout=100)
+            break
+        except Exception:
+            pass
+    else:
+        api_request_context.get('/', timeout=100)
+    yield

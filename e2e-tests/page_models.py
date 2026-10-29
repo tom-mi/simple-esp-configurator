@@ -62,6 +62,13 @@ class HomePage(BasePage):
     def reset_button(self):
         return self.page.get_by_text('Reset configuration')
 
+    def login_button(self):
+        return self.page.get_by_text('Login', exact=True)
+
+    def ensure_login(self):
+        if self.login_button().count() > 0:
+            self.login_button().click()
+
     def reset(self):
         print("Resetting ...")
         self.goto()
@@ -70,7 +77,6 @@ class HomePage(BasePage):
         self.reset_button().click()
         self.expect_reboot_dialogue()
         self.expect_at_page()
-
 
 class ConfigurationPage(BasePage):
     def __init__(self, page: Page, device_name: str):

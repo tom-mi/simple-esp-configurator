@@ -7,7 +7,7 @@
 #include "Common.h"
 
 namespace SimpleEspConfigurator {
-    static auto RESTART_DELAY_MS = 500;
+    static auto RESTART_DELAY_MS = 200;
 
     static auto HTML_HTML_HEAD_CHARSET =
             "<!doctype html>\n"
@@ -88,7 +88,7 @@ namespace SimpleEspConfigurator {
         _adminPw = pw;
     }
 
-    bool ConfiguratorCore::_isRequestAuthenticated() const {
+    bool ConfiguratorCore::isRequestAuthenticated() const {
         if (_adminPw.empty()) {
             return true;
         }
@@ -96,7 +96,7 @@ namespace SimpleEspConfigurator {
         return _server.header("Authorization") == expected;
     }
 
-    void ConfiguratorCore::_requestAuthentication() {
+    void ConfiguratorCore::requestAuthentication() {
         _server.requestAuthentication();
     }
 
@@ -106,53 +106,50 @@ namespace SimpleEspConfigurator {
             _server.send(200, "text/html", _renderHomePage().c_str());
         });
         _server.on("/login", HTTP_POST, [this]() {
-            if (_isRequestAuthenticated()) {
+            if (isRequestAuthenticated()) {
                 _server.send(200, "text/html", renderRedirectToHomePage("Logged in.").c_str());
             } else {
-                _requestAuthentication();
+                requestAuthentication();
             }
         });
         _server.on("/config", HTTP_GET, [this]() {
-            if (!_isRequestAuthenticated()) {
-                _requestAuthentication();
+            if (!isRequestAuthenticated()) {
+                requestAuthentication();
                 return;
             }
             _server.send(200, "text/html", _renderConfigPage(false).c_str());
         });
         _server.on("/config", HTTP_POST, [this]() {
-            if (!_isRequestAuthenticated()) {
-                _requestAuthentication();
+            if (!isRequestAuthenticated()) {
+                requestAuthentication();
                 return;
             }
             if (_saveConfigFromForm()) {
                 _server.send(200, "text/html",
                              renderRedirectToHomePage("Configuration stored. Rebooting ...").c_str());
-                delay(RESTART_DELAY_MS);
-                ESP.restart(); // TODO make 8266 compatible
+                reboot();
             } else {
                 _server.send(400, "text/html", _renderConfigPage(true).c_str());
             }
         });
         // Reboot endpoint
         _server.on("/reboot", HTTP_POST, [this]() {
-            if (!_isRequestAuthenticated()) {
-                _requestAuthentication();
+            if (!isRequestAuthenticated()) {
+                requestAuthentication();
                 return;
             }
             _server.send(200, "text/html", renderRedirectToHomePage("Rebooting ...").c_str());
-            delay(RESTART_DELAY_MS);
             reboot();
         });
         // Reset endpoint – clears preferences then reboots
         _server.on("/reset", HTTP_POST, [this]() {
-            if (!_isRequestAuthenticated()) {
-                _requestAuthentication();
+            if (!isRequestAuthenticated()) {
+                requestAuthentication();
                 return;
             }
             _erasePreferences();
             _server.send(200, "text/html",
                          renderRedirectToHomePage("Configuration has been reset. Rebooting ...").c_str());
-            delay(RESTART_DELAY_MS);
             reboot();
         });
         _server.begin();
@@ -162,14 +159,14 @@ namespace SimpleEspConfigurator {
     void ConfiguratorCore::loop() { _server.handleClient(); }
 
     void ConfiguratorCore::reboot() {
-        ESP.restart(); // make 8266 compatible when needed
+        // Restart after a short delay
+        delay(RESTART_DELAY_MS);
+        _server.close();
+        ESP.restart(); // TODO make 8266 compatible
     }
 
     void ConfiguratorCore::reset() {
         _erasePreferences();
-        // Clear all configuration keys stored in Preferences namespace "config"
-        // Restart after a short delay
-        delay(RESTART_DELAY_MS);
         reboot();
     }
 
@@ -212,14 +209,14 @@ namespace SimpleEspConfigurator {
     std::string ConfiguratorCore::_renderHomePage() {
         std::string body = _customHomePageHtml;
         for (const auto &[path, label, admin]: _menu) {
-            if (admin && !_isRequestAuthenticated()) {
+            if (admin && !isRequestAuthenticated()) {
                 continue;
             }
             body += "<div class='item'><form action='" + path + "'>\n";
             body += "  <button type='submit'>" + label + "</button>\n";
             body += "</form></div>\n";
         }
-        if (_isRequestAuthenticated()) {
+        if (isRequestAuthenticated()) {
             body += "<div class='item'><form action='/reboot' method='post'>\n";
             body += "  <button type='submit'>Reboot</button>\n";
             body += "</form></div>\n";
@@ -229,7 +226,7 @@ namespace SimpleEspConfigurator {
                     "reboot</button>\n";
             body += "</form></div>\n";
         }
-        if (!_isRequestAuthenticated()) {
+        if (!isRequestAuthenticated()) {
             body += "<div class='item'><form action='/login' method='post'>\n";
             body += "  <button type='submit'>Login</button>\n";
             body += "</form></div>\n";

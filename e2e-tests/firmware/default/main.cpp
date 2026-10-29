@@ -65,6 +65,8 @@ void setup() {
     const auto ulong2 = config.ulongParameter<"ulong2", "ULong2", 1000UL, 100UL, 10000UL>();
     const auto p1 = config.passwordParameter<"p1", "Password1", "s3cr3t", 4, 8>();
     const auto p2 = config.passwordParameter<"p2", "Password2", "", -1, -1, false>();
+    const auto adminPassword = config.passwordParameter<"pw", "Admin Password", "", -1, -1, false>();
+    config.setAdminPassword(adminPassword);
     const auto ap1 = config.apParameters<"my_ap_ssid", "my_ap_pass">();
     const auto wifi1 = config.wifiParameters<"my_ssid", "my_pass1", "wifi1_", "MyWiFi">();
     const auto net1 = config.networkParameters<

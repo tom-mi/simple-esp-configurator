@@ -38,12 +38,12 @@ namespace SimpleEspConfigurator {
         /**
          * @brief Reboot the ESP device.
          */
-        static void reboot();
+        void reboot();
 
         /**
          * @brief Reset stored configuration and reboot.
          */
-        static void reset();
+        void reset();
 
         void addField(ConfiguratorField *field) {
             _fields.push_back(field);
@@ -53,9 +53,9 @@ namespace SimpleEspConfigurator {
 
         void setAdminPassword(const std::string &pw);
 
-        [[nodiscard]] bool _isRequestAuthenticated() const;
+        [[nodiscard]] bool isRequestAuthenticated() const;
 
-        void _requestAuthentication();
+        void requestAuthentication();
 
         [[nodiscard]] std::string renderPage(const std::string &title,
                                              const std::string &body,

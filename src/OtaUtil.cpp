@@ -43,7 +43,7 @@ static void handleOtaFinalize(ConfiguratorCore &configurator) {
 
 static std::string renderOtaPage(const ConfiguratorCore &configurator) {
     const std::string body =
-            "<form method='post' enctype='multipart/form-data' action='/ota'"
+            "<form method='post' enctype='multipart/form-data' action='/update'"
             " onsubmit='return confirm(\"Overwrite firmware?\");'>\n"
             "<div class='item'><input type='file' name='file' required accept='.bin' /></item>\n"
             "<div class='item'><button class='danger' type='submit'>Upload</button></div>\n"
@@ -54,7 +54,7 @@ static std::string renderOtaPage(const ConfiguratorCore &configurator) {
 void enableOtaUpdate(ConfiguratorCore &configurator) {
     auto *server = configurator.server();
     server->on("/update", HTTP_GET, [&configurator, server]() {
-        if (!configurator._isRequestAuthenticated()) {
+        if (!configurator.isRequestAuthenticated()) {
             server->sendHeader("WWW-Authenticate", "Basic realm=\"OTA Update\"");
             server->send(401);
             return;
@@ -63,13 +63,15 @@ void enableOtaUpdate(ConfiguratorCore &configurator) {
     });
     // Separate callbacks: first sends response after upload, second processes upload data
     server->on("/update", HTTP_POST, [&configurator]() {
-                       if (!configurator._isRequestAuthenticated()) {
-                           configurator.server()->sendHeader("WWW-Authenticate", "Basic realm=\"OTA Update\"");
-                           configurator.server()->send(401);
+                       if (!configurator.isRequestAuthenticated()) {
+                           configurator.requestAuthentication();
                            return;
                        }
                        handleOtaFinalize(configurator);
                    }, [&configurator]() {
+                       if (!configurator.isRequestAuthenticated()) {
+                           return;
+                       }
                        handleOtaUpload(configurator);
                    });
     configurator.addMenuItem("/update", "OTA update");
