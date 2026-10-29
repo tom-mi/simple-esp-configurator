@@ -30,3 +30,19 @@ See the [examples](./examples):
 
 ## Configuration reference
 
+## Development & Testing
+
+Build all example firmwares (this also updates the example firmware table above)
+```
+./scripts/build
+```
+
+Run offline tests (currently only tests that firmware sizes don't grow)
+```
+./scripts/test offline
+```
+
+Run ESP32 tests (requires a ESP32 device connected via USB)
+```
+./scripts/test esp32
+```

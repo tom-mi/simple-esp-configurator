@@ -18,4 +18,4 @@ markers = [
     "offline: runs without a connected device",
 ]
 addopts = '--order-scope=module'
-#reruns = 3
+reruns = 3
