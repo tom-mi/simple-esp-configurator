@@ -1,6 +1,5 @@
 #pragma once
 #include "ConfiguratorField.h"
-#include <functional>
 
 namespace SimpleEspConfigurator {
     /**

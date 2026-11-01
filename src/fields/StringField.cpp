@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <utility>
 
-#include "Common.h"
+#include "../Common.h"
 
 namespace SimpleEspConfigurator {
 

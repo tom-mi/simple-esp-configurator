@@ -2,11 +2,11 @@
 #include "ConfiguratorCore.h"
 #include "OtaUtil.h"
 #include "WifiUtil.h"
-#include "BooleanField.h"
-#include "CustomHtmlField.h"
-#include "IPv4AddressField.h"
-#include "NumberField.h"
-#include "StringField.h"
+#include "fields/BooleanField.h"
+#include "fields/CustomHtmlField.h"
+#include "fields/IPv4AddressField.h"
+#include "fields/NumberField.h"
+#include "fields/StringField.h"
 
 #include "Common.h"
 

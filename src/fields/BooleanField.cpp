@@ -4,7 +4,7 @@
 #include <utility>
 
 // ReSharper disable once CppUnusedIncludeDirective - needed for log tag
-#include "Common.h"
+#include "../Common.h"
 
 namespace SimpleEspConfigurator {
 

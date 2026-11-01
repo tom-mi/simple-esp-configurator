@@ -5,7 +5,7 @@
 // TODO make this Esp8266 compatible
 #include <WebServer.h>
 
-#include "ConfiguratorField.h"
+#include "fields/ConfiguratorField.h"
 
 namespace SimpleEspConfigurator {
     class ConfiguratorCore {
