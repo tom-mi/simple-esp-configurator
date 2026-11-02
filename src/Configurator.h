@@ -362,7 +362,7 @@ namespace SimpleEspConfigurator {
          * @return True if connection was successful, false otherwise.
          */
         bool connectToWifiSync(const WiFiParameters &parameters, const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) { // NOLINT(*-convert-member-functions-to-static)
-            const auto netParams = NetworkParameters { .dhcp = true };
+            const auto netParams = NetworkParameters{.dhcp = true};
             return SimpleEspConfigurator::connectToWifiSync(parameters, netParams, timeoutMs);
         }
 

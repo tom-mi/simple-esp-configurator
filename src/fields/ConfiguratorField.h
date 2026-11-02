@@ -6,20 +6,21 @@
 
 class ConfiguratorField {
 public:
-  ConfiguratorField(std::string id)
-      : _id(std::move(id)) {}
+    ConfiguratorField(std::string id)
+        : _id(std::move(id)) {
+    }
 
-  virtual ~ConfiguratorField() = default;
+    virtual ~ConfiguratorField() = default;
 
-  const std::string _id;
+    const std::string _id;
 
-  virtual void setValueFromForm(const std::string &formVal) = 0;
+    virtual void setValueFromForm(const std::string &formVal) = 0;
 
-  virtual bool validateFromForm(const std::string &formVal) = 0;
+    virtual bool validateFromForm(const std::string &formVal) = 0;
 
-  virtual std::string generateHtml() = 0;
+    virtual std::string generateHtml() = 0;
 
-  virtual void loadValue() = 0;
+    virtual void loadValue() = 0;
 
-  [[nodiscard]] std::string id() const { return _id; }
+    [[nodiscard]] std::string id() const { return _id; }
 };

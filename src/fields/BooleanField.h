@@ -3,29 +3,27 @@
 #include <string>
 
 namespace SimpleEspConfigurator {
+    class BooleanField : public ConfiguratorField {
+    public:
+        const std::string TRUE_VALUE = "T";
 
-class BooleanField : public ConfiguratorField {
-public:
-    const std::string TRUE_VALUE = "T";
+        BooleanField(const std::string &id,
+                     std::string label,
+                     bool defaultValue);
 
-    BooleanField(const std::string &id,
-                  std::string label,
-                  bool defaultValue);
+        void setValueFromForm(const std::string &formVal) override;
 
-    void setValueFromForm(const std::string &formVal) override;
+        bool validateFromForm(const std::string &formVal) override;
 
-    bool validateFromForm(const std::string &formVal) override;
+        std::string generateHtml() override;
 
-    std::string generateHtml() override;
+        [[nodiscard]] bool getValue() const { return _value; }
 
-    [[nodiscard]] bool getValue() const { return _value; }
+        void loadValue() override;
 
-    void loadValue() override;
-
-protected:
-    const std::string _label;
-    const bool _defaultValue;
-    bool _value;
-};
-
+    protected:
+        const std::string _label;
+        const bool _defaultValue;
+        bool _value;
+    };
 } // namespace SimpleEspConfigurator
