@@ -5,7 +5,7 @@ set -euo pipefail
 REPO_ROOT="$(dirname ${BASH_SOURCE[0]})/.."
 cd ${REPO_ROOT}
 
-TARGET="${1:?usage: scripts/test <esp32|esp8266|offline>}"
+TARGET="${1:?usage: scripts/test <esp32|offline>}"
 
 case ${TARGET} in
   esp32)
@@ -13,10 +13,6 @@ case ${TARGET} in
     pio run --environment test-e2e-ota-esp32
     cd e2e-tests
     uv run pytest -m esp32
-    ;;
-  esp8266)
-    echo "esp8266 tests are not enabled yet (needs test-e2e-esp8266 env + firmware port)" >&2
-    exit 1
     ;;
   offline)
     pio run
