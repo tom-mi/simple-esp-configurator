@@ -1,6 +1,7 @@
 #pragma once
 #include <DNSServer.h>
 #include "ConfiguratorCore.h"
+#include "NetworkParameters.h"
 
 namespace SimpleEspConfigurator {
     struct WiFiParameters {
@@ -11,16 +12,6 @@ namespace SimpleEspConfigurator {
     struct ApParameters {
         std::string ssid;
         std::string password;
-    };
-
-    struct NetworkParameters {
-        bool dhcp;
-        IPAddress ip;
-        IPAddress gateway;
-        IPAddress subnet;
-        IPAddress dns1;
-        IPAddress dns2;
-        std::string hostname;
     };
 
     bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams, uint16_t timeoutMs);
