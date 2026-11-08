@@ -30,9 +30,10 @@ See the [examples](./examples):
 <!-- START example table -->
 | Example | Size (bytes) | Delta to baseline (bytes) |
 |---------|--------------:|---------------------------:|
-| [basic-wifi](./examples/basic-wifi) | 1052608 | +127776 |
-| [minimal](./examples/minimal) | 1010928 | +86096 |
-| [minimal-wifi](./examples/minimal-wifi) | 1015952 | +91120 |
+| [basic-wifi](./examples/basic-wifi) | 1066256 | +127376 |
+| [minimal](./examples/minimal) | 1024992 | +86112 |
+| [minimal-ethernet](./examples/minimal-ethernet) | 1029984 | +91104 |
+| [minimal-wifi](./examples/minimal-wifi) | 1030000 | +91120 |
 <!-- END example table -->
 
 ## Configuration reference
@@ -77,6 +78,8 @@ See the [examples](./examples):
 | `enableOtaUpdate()`                                                                                                                      | Enable OTA (Over-The-Air) update functionality.                                     |
 | `connectToWifiSync(parameters, netParams, timeoutMs)`                                                                                    | Connect to WiFi synchronously with network parameters.                              |
 | `connectToWifiSync(parameters, timeoutMs)`                                                                                               | Connect to WiFi synchronously using DHCP.                                           |
+| `connectToEthernetSync(netParams, timeoutMs)`                                                                                            | Connect to Ethernet synchronously with network parameters.                          |
+| `connectToEthernetSync(timeoutMs)`                                                                                                       | Connect to Ethernet synchronously using DHCP.                                       |
 | `startAp(parameters)`                                                                                                                    | Start the Access Point.                                                             |
 | `startApWithCaptivePortal(parameters, dnsServer)`                                                                                        | Start the Access Point with captive portal.                                         |
 | `startCaptivePortal(dnsServer)`                                                                                                          | Start the captive portal.                                                           |

@@ -2,6 +2,7 @@
 #include "ConfiguratorCore.h"
 #include "OtaUtil.h"
 #include "WifiUtil.h"
+#include "EthernetUtil.h"
 #include "fields/BooleanField.h"
 #include "fields/CustomHtmlField.h"
 #include "fields/IPv4AddressField.h"
@@ -364,6 +365,27 @@ namespace SimpleEspConfigurator {
         bool connectToWifiSync(const WiFiParameters &parameters, const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) { // NOLINT(*-convert-member-functions-to-static)
             const auto netParams = NetworkParameters{.dhcp = true};
             return SimpleEspConfigurator::connectToWifiSync(parameters, netParams, timeoutMs);
+        }
+
+        /**
+         * @brief Connect to Ethernet synchronously with network parameters.
+         * @param netParams The network configuration (DHCP, IP, gateway, etc.).
+         * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
+         * @return True if connection was successful, false otherwise.
+         */
+        bool connectToEthernetSync(const NetworkParameters &netParams, // NOLINT(*-convert-member-functions-to-static)
+                                   const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) {
+            return SimpleEspConfigurator::connectToEthernetSync(netParams, timeoutMs);
+        }
+
+        /**
+         * @brief Connect to Ethernet synchronously using DHCP.
+         * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
+         * @return True if connection was successful, false otherwise.
+         */
+        bool connectToEthernetSync(const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) { // NOLINT(*-convert-member-functions-to-static)
+            const auto netParams = NetworkParameters{.dhcp = true};
+            return SimpleEspConfigurator::connectToEthernetSync(netParams, timeoutMs);
         }
 
         /**
