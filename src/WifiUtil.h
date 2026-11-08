@@ -1,24 +1,91 @@
 #pragma once
 #include <DNSServer.h>
 #include "ConfiguratorCore.h"
-#include "NetworkParameters.h"
+#include "Parameters.h"
+#include "Common.h"
+
+#include "WiFi.h"
 
 namespace SimpleEspConfigurator {
-    struct WiFiParameters {
-        std::string ssid;
-        std::string password;
-    };
+     inline bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams,
+                                   const uint16_t timeoutMs) {
+        if (!netParams.dhcp) {
+            WiFi.config(netParams.ip, netParams.gateway, netParams.subnet, netParams.dns1, netParams.dns2);
+        } else if (!netParams.hostname.empty()) {
+            WiFi.setHostname(netParams.hostname.c_str());
+        }
+        if (parameters.ssid.empty()) {
+            ESP_LOGI(SEC_LOG_TAG, "SSID empty, not connecting to WiFi.");
+            return false;
+        }
+        ESP_LOGI(SEC_LOG_TAG, "Connecting to WiFi: ssid=%s ...", parameters.ssid.c_str());
+        const unsigned long startTime = millis();
+        WiFi.begin(parameters.ssid.c_str(), parameters.password.c_str());
 
-    struct ApParameters {
-        std::string ssid;
-        std::string password;
-    };
+        while (millis() - startTime < timeoutMs) {
+            if (WiFi.status() == WL_CONNECTED) {
+                ESP_LOGI(SEC_LOG_TAG,
+                         "WiFi connected: ssid=%s ip=%s sub=%s gw=%s",
+                         WiFi.SSID().c_str(), WiFi.localIP().toString().c_str(), WiFi.subnetMask().toString().c_str(),
+                         WiFi.gatewayIP().toString().c_str());
+                return true;
+            }
+            if (WiFi.status() == WL_CONNECT_FAILED) {
+                ESP_LOGW(SEC_LOG_TAG, "Connecting to WiFi failed.");
+                return false;
+            }
+        }
+        ESP_LOGW(SEC_LOG_TAG, "Connecting to WiFi timed out after %d ms.", timeoutMs);
+        return false;
+    }
 
-    bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams, uint16_t timeoutMs);
+    inline bool startAp(const ApParameters &parameters) {
+        ESP_LOGI(SEC_LOG_TAG, "Starting AP: ssid=%s", parameters.ssid.c_str());
+        bool result;
+        if (parameters.password.empty()) {
+            result = WiFi.softAP(parameters.ssid.c_str());
+        } else {
+            result = WiFi.softAP(parameters.ssid.c_str(), parameters.password.c_str());
+        }
+        if (result) { // NOLINT(*-branch-clone)
+            ESP_LOGI(SEC_LOG_TAG, "AP started: ssid=%s ip=%s sub=%s gw=%s",
+                     WiFi.AP.SSID().c_str(), WiFi.AP.localIP().toString().c_str(),
+                     WiFi.AP.subnetMask().toString().c_str(),
+                     WiFi.AP.gatewayIP().toString().c_str());
+        } else {
+            ESP_LOGW(SEC_LOG_TAG, "Failed to start AP.");
+        }
+        return result;
+    }
 
-    bool startAp(const ApParameters &parameters);
+    inline void startCaptivePortal(ConfiguratorCore &configurator, DNSServer &dnsServer) {
+        ESP_LOGI(SEC_LOG_TAG, "Setting up captive portal ...");
+        // See https://en.wikipedia.org/wiki/Captive_portal
+        //
+        // The DHCP captive portal seems to have no effect ??
+        // WiFi.AP.enableDhcpCaptivePortal();
 
-    bool startApWithCaptivePortal(ConfiguratorCore &configurator, const ApParameters &parameters, DNSServer &dnsServer);
+        // Needed to trigger "Sign in to a Wi-Fi network" dialogue on android
+        // reference: https://github.com/tzapu/WiFiManager/issues/553#issuecomment-910222676
+        configurator.server()->onNotFound([&configurator]() {
+            configurator.server()->sendHeader("Location", "/");
+            configurator.server()->send(307, "text/html", "");
+        });
 
-    void startCaptivePortal(ConfiguratorCore &configurator, DNSServer &dnsServer);
+        const IPAddress ip = WiFi.softAPIP() ? WiFi.softAPIP() : WiFi.localIP(); // fallback mostly for testing
+        if (dnsServer.start(53, "*", ip)) {
+            ESP_LOGI(SEC_LOG_TAG, "Started captive portal DNS with ip %s", ip.toString().c_str());
+        } else {
+            ESP_LOGW(SEC_LOG_TAG, "Failed to start captive portal DNS with ip %s.", ip.toString().c_str());
+        }
+    }
+
+    inline bool startApWithCaptivePortal(ConfiguratorCore &configurator, const ApParameters &parameters,
+                                         DNSServer &dnsServer) {
+        if (startAp(parameters)) {
+            startCaptivePortal(configurator, dnsServer);
+            return true;
+        }
+        return false;
+    }
 } // namespace SimpleEspConfigurator
