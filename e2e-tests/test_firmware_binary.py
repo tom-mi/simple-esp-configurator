@@ -9,10 +9,11 @@ ROOT_DIR = pathlib.Path(__file__).parent.parent.absolute()
 
 # (pio env, upper size limit). Fail if a build grows beyond its limit, warn if it shrinks.
 FIRMWARES = [
-    ('test-e2e-esp32', 1066688),
-    ('example-basic-wifi', 1052720),
-    ('example-minimal', 1011200),
-    ('example-empty-baseline', 925040),
+    ('test-e2e-esp32', 1066640),
+    ('example-basic-wifi', 1052704),
+    ('example-minimal', 1008880),
+    ('example-minimal-ethernet', 530992),
+    ('example-empty-baseline', 922768),
 ]
 
 

@@ -6,6 +6,8 @@
 #include <Arduino.h>
 
 #include <Configurator.h>
+#include <WifiUtil.h>
+#include <OtaUtil.h>
 
 #include <esp_log.h>
 
@@ -42,10 +44,10 @@ void setup() {
         .gateway = IPAddress(WIFI_GW),
         .subnet = IPAddress(WIFI_SUBNET),
     };
-    if (!config.connectToWifiSync(wifiParameters, networkParameters)) {
+    if (!SimpleEspConfigurator::connectToWifiSync(wifiParameters, networkParameters)) {
         // No WiFi connection: start AP with captive portal for configuration
         const SimpleEspConfigurator::ApParameters apParameters = config.apParameters<"e2e_ap", "e2e_pass">();
-        startApWithCaptivePortal(config, apParameters, dnsServer);
+        SimpleEspConfigurator::startApWithCaptivePortal(config, apParameters, dnsServer);
     }
 
     // fields to be tested
@@ -119,9 +121,9 @@ void setup() {
     config.server()->on("/fields", [server, fieldResponse] {
         server->send(200, "text/html", fieldResponse.c_str());
     });
-    config.enableOtaUpdate();
+    SimpleEspConfigurator::enableOtaUpdate(config);
     config.startWebServer();
-    config.startCaptivePortal(dnsServer);
+    SimpleEspConfigurator::startCaptivePortal(config, dnsServer);
 }
 
 void loop() {

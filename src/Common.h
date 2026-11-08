@@ -3,6 +3,7 @@
 namespace SimpleEspConfigurator {
     static auto SEC_LOG_TAG = "SEC";
     static auto SEC_PREF_NS = "SimpleEspConfig";
+    constexpr auto DEFAULT_TIMEOUT_MS = 10000;
 
     static const char *formatBool(const bool value) {
         return value ? "true" : "false";

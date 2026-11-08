@@ -6,7 +6,13 @@
 #include "ETH.h"
 
 namespace SimpleEspConfigurator {
-    inline bool connectToEthernetSync(const NetworkParameters &netParams, const uint16_t timeoutMs) {
+    /**
+     * @brief Connect to Ethernet synchronously with network parameters.
+     * @param netParams The network configuration (DHCP, IP, gateway, etc.).
+     * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
+     * @return True if connection was successful, false otherwise.
+     */
+    inline bool connectToEthernetSync(const NetworkParameters &netParams, const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) {
         if (!netParams.dhcp) {
             ETH.config(netParams.ip, netParams.gateway, netParams.subnet, netParams.dns1, netParams.dns2);
         } else if (!netParams.hostname.empty()) {
@@ -27,5 +33,15 @@ namespace SimpleEspConfigurator {
         }
         ESP_LOGW(SEC_LOG_TAG, "Connecting to Ethernet timed out after %d ms.", timeoutMs);
         return false;
+    }
+
+    /**
+     * @brief Connect to Ethernet synchronously using DHCP.
+     * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
+     * @return True if connection was successful, false otherwise.
+     */
+    inline bool connectToEthernetSync(const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) {
+        const auto netParams = NetworkParameters{.dhcp = true};
+        return connectToEthernetSync(netParams, timeoutMs);
     }
 } // namespace SimpleEspConfigurator

@@ -7,8 +7,15 @@
 #include "WiFi.h"
 
 namespace SimpleEspConfigurator {
-     inline bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams,
-                                   const uint16_t timeoutMs) {
+    /**
+     * @brief Connect to WiFi synchronously with network parameters.
+     * @param parameters The WiFi credentials (SSID and password).
+     * @param netParams The network configuration (DHCP, IP, gateway, etc.).
+     * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
+     * @return True if connection was successful, false otherwise.
+     */
+    inline bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams,
+                                  const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) {
         if (!netParams.dhcp) {
             WiFi.config(netParams.ip, netParams.gateway, netParams.subnet, netParams.dns1, netParams.dns2);
         } else if (!netParams.hostname.empty()) {
@@ -39,6 +46,22 @@ namespace SimpleEspConfigurator {
         return false;
     }
 
+    /**
+     * @brief Connect to WiFi synchronously using DHCP.
+     * @param parameters The WiFi credentials (SSID and password).
+     * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
+     * @return True if connection was successful, false otherwise.
+     */
+    inline bool connectToWifiSync(const WiFiParameters &parameters, const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) {
+        const auto netParams = NetworkParameters{.dhcp = true};
+        return connectToWifiSync(parameters, netParams, timeoutMs);
+    }
+
+    /**
+     * @brief Start the Access Point.
+     * @param parameters The AP configuration (SSID and password).
+     * @return True if AP was started successfully, false otherwise.
+     */
     inline bool startAp(const ApParameters &parameters) {
         ESP_LOGI(SEC_LOG_TAG, "Starting AP: ssid=%s", parameters.ssid.c_str());
         bool result;
@@ -58,6 +81,11 @@ namespace SimpleEspConfigurator {
         return result;
     }
 
+    /**
+     * @brief Start the captive portal.
+     * @param configurator The ConfiguratorCore instance.
+     * @param dnsServer The DNS server for the captive portal.
+     */
     inline void startCaptivePortal(ConfiguratorCore &configurator, DNSServer &dnsServer) {
         ESP_LOGI(SEC_LOG_TAG, "Setting up captive portal ...");
         // See https://en.wikipedia.org/wiki/Captive_portal
@@ -80,6 +108,13 @@ namespace SimpleEspConfigurator {
         }
     }
 
+    /**
+     * @brief Start the Access Point with captive portal.
+     * @param configurator The ConfiguratorCore instance.
+     * @param parameters The AP configuration (SSID and password).
+     * @param dnsServer The DNS server for the captive portal.
+     * @return True if AP was started successfully, false otherwise.
+     */
     inline bool startApWithCaptivePortal(ConfiguratorCore &configurator, const ApParameters &parameters,
                                          DNSServer &dnsServer) {
         if (startAp(parameters)) {

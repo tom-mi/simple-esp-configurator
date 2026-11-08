@@ -1,8 +1,6 @@
 #pragma once
 #include "ConfiguratorCore.h"
-#include "OtaUtil.h"
-#include "WifiUtil.h"
-#include "EthernetUtil.h"
+#include "Parameters.h"
 #include "fields/BooleanField.h"
 #include "fields/CustomHtmlField.h"
 #include "fields/IPv4AddressField.h"
@@ -10,9 +8,6 @@
 #include "fields/StringField.h"
 
 #include "Common.h"
-
-constexpr auto DEFAULT_TIMEOUT_MS = 10000;
-
 
 namespace SimpleEspConfigurator {
     /**
@@ -330,89 +325,5 @@ namespace SimpleEspConfigurator {
             );
         }
 
-        /*
-         * Convenience methods for easy use (even though some of them could be static).
-         * The logic is intentionally moved to other files, so the compiler & linker can optimize for smaller binaries.
-         */
-
-        /**
-         * @brief Enable OTA (Over-The-Air) update functionality.
-         *
-         * Sets up the OTA update server and registers the update endpoint.
-         */
-        void enableOtaUpdate() {
-            SimpleEspConfigurator::enableOtaUpdate(*this);
-        }
-
-        /**
-         * @brief Connect to WiFi synchronously with network parameters.
-         * @param parameters The WiFi credentials (SSID and password).
-         * @param netParams The network configuration (DHCP, IP, gateway, etc.).
-         * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
-         * @return True if connection was successful, false otherwise.
-         */
-        bool connectToWifiSync(const WiFiParameters &parameters, const NetworkParameters &netParams, // NOLINT(*-convert-member-functions-to-static)
-                               const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) {
-            return SimpleEspConfigurator::connectToWifiSync(parameters, netParams, timeoutMs);
-        }
-
-        /**
-         * @brief Connect to WiFi synchronously using DHCP.
-         * @param parameters The WiFi credentials (SSID and password).
-         * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
-         * @return True if connection was successful, false otherwise.
-         */
-        bool connectToWifiSync(const WiFiParameters &parameters, const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) { // NOLINT(*-convert-member-functions-to-static)
-            const auto netParams = NetworkParameters{.dhcp = true};
-            return SimpleEspConfigurator::connectToWifiSync(parameters, netParams, timeoutMs);
-        }
-
-        /**
-         * @brief Connect to Ethernet synchronously with network parameters.
-         * @param netParams The network configuration (DHCP, IP, gateway, etc.).
-         * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
-         * @return True if connection was successful, false otherwise.
-         */
-        bool connectToEthernetSync(const NetworkParameters &netParams, // NOLINT(*-convert-member-functions-to-static)
-                                   const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) {
-            return SimpleEspConfigurator::connectToEthernetSync(netParams, timeoutMs);
-        }
-
-        /**
-         * @brief Connect to Ethernet synchronously using DHCP.
-         * @param timeoutMs The timeout in milliseconds (default: DEFAULT_TIMEOUT_MS).
-         * @return True if connection was successful, false otherwise.
-         */
-        bool connectToEthernetSync(const uint16_t timeoutMs = DEFAULT_TIMEOUT_MS) { // NOLINT(*-convert-member-functions-to-static)
-            const auto netParams = NetworkParameters{.dhcp = true};
-            return SimpleEspConfigurator::connectToEthernetSync(netParams, timeoutMs);
-        }
-
-        /**
-         * @brief Start the Access Point.
-         * @param parameters The AP configuration (SSID and password).
-         * @return True if AP was started successfully, false otherwise.
-         */
-        bool startAp(const ApParameters &parameters) { // NOLINT(*-convert-member-functions-to-static)
-            return SimpleEspConfigurator::startAp(parameters);
-        }
-
-        /**
-         * @brief Start the Access Point with captive portal.
-         * @param parameters The AP configuration (SSID and password).
-         * @param dnsServer The DNS server for the captive portal.
-         * @return True if AP was started successfully, false otherwise.
-         */
-        bool startApWithCaptivePortal(const ApParameters &parameters, DNSServer &dnsServer) {
-            return SimpleEspConfigurator::startApWithCaptivePortal(*this, parameters, dnsServer);
-        }
-
-        /**
-         * @brief Start the captive portal.
-         * @param dnsServer The DNS server for the captive portal.
-         */
-        void startCaptivePortal(DNSServer &dnsServer) {
-            SimpleEspConfigurator::startCaptivePortal(*this, dnsServer);
-        }
     };
 } // namespace SimpleEspConfigurator

@@ -5,6 +5,8 @@
 #include <Arduino.h>
 
 #include <Configurator.h>
+#include <WifiUtil.h>
+#include <OtaUtil.h>
 
 #include <esp_log.h>
 
@@ -39,17 +41,17 @@ void setup() {
         .gateway = IPAddress(WIFI_GW),
         .subnet = IPAddress(WIFI_SUBNET),
     };
-    if (!config.connectToWifiSync(wifiParameters, networkParameters)) {
+    if (!SimpleEspConfigurator::connectToWifiSync(wifiParameters, networkParameters)) {
         // No WiFi connection: start AP with captive portal for configuration
         const SimpleEspConfigurator::ApParameters apParameters = config.apParameters<"e2e_ap", "e2e_pass">();
-        startApWithCaptivePortal(config, apParameters, dnsServer);
+        SimpleEspConfigurator::startApWithCaptivePortal(config, apParameters, dnsServer);
     }
 
     // Marker device name to identify this firmware
     config.deviceName("e2e-testing-ota");
 
     // Enable OTA update so firmware can be reverted
-    config.enableOtaUpdate();
+    SimpleEspConfigurator::enableOtaUpdate(config);
     config.startWebServer();
 }
 

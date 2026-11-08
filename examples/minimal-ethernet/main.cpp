@@ -1,4 +1,5 @@
 #include <Configurator.h>
+#include <EthernetUtil.h>
 
 #include <esp_log.h>
 
@@ -11,7 +12,7 @@ void setup() {
 
     const auto netParams = config.networkParameters<true, "eth_", "Ethernet">();
 
-    if (!config.connectToEthernetSync(netParams)) {
+    if (!SimpleEspConfigurator::connectToEthernetSync(netParams)) {
         // Handle connection failure (e.g., start AP for configuration)
         Serial.println("Ethernet connection failed");
     }

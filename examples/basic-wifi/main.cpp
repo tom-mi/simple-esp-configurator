@@ -1,4 +1,6 @@
 #include <Configurator.h>
+#include <WifiUtil.h>
+#include <OtaUtil.h>
 
 #include <esp_log.h>
 
@@ -45,13 +47,13 @@ void setup() {
     config.setAdminPassword(adminPassword);
 
     // Blocks until the stored Wi-Fi network is joined (or the timeout expires).
-    if (!config.connectToWifiSync(wifiParameters, wifiNetParams)) {
+    if (!SimpleEspConfigurator::connectToWifiSync(wifiParameters, wifiNetParams)) {
         // No Wi-Fi connection: start an access point with a captive portal for configuration.
-        config.startApWithCaptivePortal(apParameters, dnsServer);
+        SimpleEspConfigurator::startApWithCaptivePortal(config, apParameters, dnsServer);
     }
 
     // Allows updating the firmware over the air from a OTA subpage in the web portal.
-    config.enableOtaUpdate();
+    SimpleEspConfigurator::enableOtaUpdate(config);
 
     // Starts the web server that serves the config page.
     config.startWebServer();

@@ -1,4 +1,5 @@
 #include <Configurator.h>
+#include <WifiUtil.h>
 
 #include <esp_log.h>
 
@@ -12,8 +13,8 @@ void setup() {
     const auto wifiParameters = config.wifiParameters();
     const auto apParameters = config.apParameters();
 
-    if (!config.connectToWifiSync(wifiParameters)) {
-        startAp(apParameters);
+    if (!SimpleEspConfigurator::connectToWifiSync(wifiParameters)) {
+        SimpleEspConfigurator::startAp(apParameters);
     }
 
     config.startWebServer();

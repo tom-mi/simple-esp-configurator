@@ -10,5 +10,5 @@
 
 ## Documentation
 
-* There should be documentation for all public methods in the classes `Configurator.h` and `ConfiguratorCore.h`.
+* There should be documentation for all public methods in the classes `Configurator.h`, `ConfiguratorCore.h`, and the `*Util.h` files (`WifiUtil.h`, `EthernetUtil.h`, `OtaUtil.h`).
 * Sync the documentation from the header files into the README.md into the subsection 'Configuration reference'.

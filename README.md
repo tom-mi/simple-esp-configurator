@@ -30,10 +30,10 @@ See the [examples](./examples):
 <!-- START example table -->
 | Example | Size (bytes) | Delta to baseline (bytes) |
 |---------|--------------:|---------------------------:|
-| [basic-wifi](./examples/basic-wifi) | 1066256 | +127376 |
-| [minimal](./examples/minimal) | 1024992 | +86112 |
-| [minimal-ethernet](./examples/minimal-ethernet) | 1029984 | +91104 |
-| [minimal-wifi](./examples/minimal-wifi) | 1030000 | +91120 |
+| [basic-wifi](./examples/basic-wifi) | 1052704 | +129936 |
+| [minimal](./examples/minimal) | 1008880 | +86112 |
+| [minimal-ethernet](./examples/minimal-ethernet) | 530992 | -391776 |
+| [minimal-wifi](./examples/minimal-wifi) | 1015952 | +93184 |
 <!-- END example table -->
 
 ## Configuration reference
@@ -75,14 +75,29 @@ See the [examples](./examples):
 | `wifiParameters<defaultSSID, defaultPassword, idPrefix, label>()`                                                                        | Create WiFi configuration parameters (SSID and password).                           |
 | `apParameters<defaultSSID, defaultPassword>()`                                                                                           | Create Access Point configuration parameters.                                       |
 | `networkParameters<defaultDhcp, idPrefix, label, defaultIp, defaultGateway, defaultSubnet, defaultDns1, defaultDns2, defaultHostname>()` | Create network configuration parameters (DHCP, IP, gateway, subnet, DNS, hostname). |
-| `enableOtaUpdate()`                                                                                                                      | Enable OTA (Over-The-Air) update functionality.                                     |
-| `connectToWifiSync(parameters, netParams, timeoutMs)`                                                                                    | Connect to WiFi synchronously with network parameters.                              |
-| `connectToWifiSync(parameters, timeoutMs)`                                                                                               | Connect to WiFi synchronously using DHCP.                                           |
-| `connectToEthernetSync(netParams, timeoutMs)`                                                                                            | Connect to Ethernet synchronously with network parameters.                          |
-| `connectToEthernetSync(timeoutMs)`                                                                                                       | Connect to Ethernet synchronously using DHCP.                                       |
-| `startAp(parameters)`                                                                                                                    | Start the Access Point.                                                             |
-| `startApWithCaptivePortal(parameters, dnsServer)`                                                                                        | Start the Access Point with captive portal.                                         |
-| `startCaptivePortal(dnsServer)`                                                                                                          | Start the captive portal.                                                           |
+
+### WifiUtil
+
+| Method                                                        | Description                                                                 |
+|---------------------------------------------------------------|-----------------------------------------------------------------------------|
+| `connectToWifiSync(parameters, netParams, timeoutMs=10000)`   | Connect to WiFi synchronously with network parameters.                      |
+| `connectToWifiSync(parameters, timeoutMs=10000)`              | Connect to WiFi synchronously using DHCP.                                   |
+| `startAp(parameters)`                                         | Start the Access Point.                                                     |
+| `startCaptivePortal(configurator, dnsServer)`                 | Start the captive portal.                                                   |
+| `startApWithCaptivePortal(configurator, parameters, dnsServer)` | Start the Access Point with captive portal.                               |
+
+### EthernetUtil
+
+| Method                                              | Description                                                                 |
+|-----------------------------------------------------|-----------------------------------------------------------------------------|
+| `connectToEthernetSync(netParams, timeoutMs=10000)` | Connect to Ethernet synchronously with network parameters.                  |
+| `connectToEthernetSync(timeoutMs=10000)`            | Connect to Ethernet synchronously using DHCP.                               |
+
+### OtaUtil
+
+| Method                                | Description                                                                 |
+|---------------------------------------|-----------------------------------------------------------------------------|
+| `enableOtaUpdate(configurator)`       | Enable OTA (Over-The-Air) update functionality.                             |
 
 ## Development & Testing
 
