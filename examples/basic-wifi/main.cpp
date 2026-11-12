@@ -16,12 +16,12 @@ void setup() {
     // the values are available after calling the parameter factory method, which
     // * adds a field to the configuration page allowing to change the value
     // * reads the stored value from the config or returns the default
-    const auto foo = config.stringParameter<"foo", "Foo", "empty">();
-    const auto secret = config.passwordParameter<"secret", "Secret", "s3cr3t", 4, 8>();
-    const auto ip = config.ipv4Parameter<"some_ip", "IP Address", "127.0.0.1", false>();
-    const auto number = config.longParameter<"number", "Number", 42, 0, 100>();
-    const auto ratio = config.doubleParameter<"ratio", "Ratio", 3.14, 0.0, 10.0>();
-    const auto enabled = config.boolParameter<"enabled", "Enabled", true>();
+    const auto foo = config.stringParameter<"foo", "Foo">("empty");
+    const auto secret = config.passwordParameter<"secret", "Secret", 4, 8>("s3cr3t");
+    const auto ip = config.ipv4Parameter<"some_ip", "IP Address", false>("127.0.0.1");
+    const auto number = config.longParameter<"number", "Number", 0, 100>(42);
+    const auto ratio = config.doubleParameter<"ratio", "Ratio", 0.0, 10.0>(3.14);
+    const auto enabled = config.boolParameter<"enabled", "Enabled">(true);
 
     Serial.println(secret.c_str());
     Serial.println(ip.toString().c_str());
@@ -33,7 +33,7 @@ void setup() {
     config.deviceName("hello-world");
 
     // Inserts raw HTML into the config page.
-    config.customHtmlParameter<"custom", "<h3>WiFi</h3>">();
+    config.customHtmlParameter<"custom">("<h3>WiFi</h3>");
 
     // For Wi-Fi, there are higher-level structs containing a couple of parameters. You can use those in whatever way
     // you want, the canonical way however is to connect to the configured Wi-Fi and/or start an access point for
@@ -43,7 +43,7 @@ void setup() {
     const auto apParameters = config.apParameters();
 
     // configurable admin password for web server (defaults to no password)
-    const auto adminPassword = config.passwordParameter<"pw", "Admin Password", "", -1, -1, false>();
+    const auto adminPassword = config.passwordParameter<"pw", "Admin Password", -1, -1, false>("");
     config.setAdminPassword(adminPassword);
 
     // Blocks until the stored Wi-Fi network is joined (or the timeout expires).

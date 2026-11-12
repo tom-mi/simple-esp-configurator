@@ -10,7 +10,7 @@ void setup() {
     esp_log_level_set("SEC", ESP_LOG_INFO);
     Serial.begin(115200);
 
-    const auto netParams = config.networkParameters<true, "eth_", "Ethernet">();
+    const auto netParams = config.networkParameters<"eth_", "Ethernet">(true);
 
     if (!SimpleEspConfigurator::connectToEthernetSync(netParams)) {
         // Handle connection failure (e.g., start AP for configuration)

@@ -39,7 +39,7 @@ void setup() {
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
 
-    const auto str1 = config.stringParameter<"str1", "String", "abc", 3, 5, "", false>();
+    const auto str1 = config.stringParameter<"str1", "String", 3, 5, "", false>("abc");
 
     config.deviceName("minimal");
     config.startWebServer();

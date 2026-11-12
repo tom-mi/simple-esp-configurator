@@ -30,10 +30,10 @@ See the [examples](./examples):
 <!-- START example table -->
 | Example | Size (bytes) | Delta to baseline (bytes) |
 |---------|--------------:|---------------------------:|
-| [basic-wifi](./examples/basic-wifi) | 1052704 | +129936 |
-| [minimal](./examples/minimal) | 1008880 | +86112 |
-| [minimal-ethernet](./examples/minimal-ethernet) | 530992 | -391776 |
-| [minimal-wifi](./examples/minimal-wifi) | 1015952 | +93184 |
+| [basic-wifi](./examples/basic-wifi) | 1052512 | +129744 |
+| [minimal](./examples/minimal) | 1008864 | +86096 |
+| [minimal-ethernet](./examples/minimal-ethernet) | 530480 | -392288 |
+| [minimal-wifi](./examples/minimal-wifi) | 1016000 | +93232 |
 <!-- END example table -->
 
 ## Configuration reference
@@ -61,20 +61,20 @@ See the [examples](./examples):
 
 | Method                                                                                                                                   | Description                                                                         |
 |------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
-| `stringParameter<id, label, defaultValue, minLen, maxLen, pattern, required>()`                                                          | Create a string configuration field. Returns the current string value.              |
-| `passwordParameter<id, label, defaultValue, minLen, maxLen, required>()`                                                                 | Create a password configuration field. Returns the current string value.            |
-| `boolParameter<id, label, defaultValue>()`                                                                                               | Create a boolean configuration field. Returns the current boolean value.            |
-| `doubleParameter<id, label, defaultValue, minValue, maxValue>()`                                                                         | Create a double configuration field. Returns the current double value.              |
-| `doubleParameter<id, label, defaultValue, minValue, maxValue, step>()`                                                                   | Create a double configuration field with step. Returns the current double value.    |
-| `longParameter<id, label, defaultValue, minValue, maxValue>()`                                                                           | Create a long configuration field. Returns the current long value.                  |
-| `longParameter<id, label, defaultValue, minValue, maxValue, step>()`                                                                     | Create a long configuration field with step. Returns the current long value.        |
-| `ulongParameter<id, label, defaultValue, minValue, maxValue>()`                                                                          | Create an unsigned long configuration field. Returns the current value.             |
-| `ulongParameter<id, label, defaultValue, minValue, maxValue, step>()`                                                                    | Create an unsigned long configuration field with step. Returns the current value.   |
-| `ipv4Parameter<id, label, defaultValue, required>()`                                                                                     | Create an IPv4 address configuration field. Returns the current IPAddress.          |
-| `customHtmlParameter<id, html>()`                                                                                                        | Create a custom HTML field that renders the provided HTML snippet.                  |
-| `wifiParameters<defaultSSID, defaultPassword, idPrefix, label>()`                                                                        | Create WiFi configuration parameters (SSID and password).                           |
-| `apParameters<defaultSSID, defaultPassword>()`                                                                                           | Create Access Point configuration parameters.                                       |
-| `networkParameters<defaultDhcp, idPrefix, label, defaultIp, defaultGateway, defaultSubnet, defaultDns1, defaultDns2, defaultHostname>()` | Create network configuration parameters (DHCP, IP, gateway, subnet, DNS, hostname). |
+| `stringParameter<id, label, minLen, maxLen, pattern, required>(defaultValue)`                                                            | Create a string configuration field. Returns the current string value.              |
+| `passwordParameter<id, label, minLen, maxLen, required>(defaultValue)`                                                                   | Create a password configuration field. Returns the current string value.            |
+| `boolParameter<id, label>(defaultValue)`                                                                                                 | Create a boolean configuration field. Returns the current boolean value.            |
+| `doubleParameter<id, label, minValue, maxValue>(defaultValue)`                                                                          | Create a double configuration field. Returns the current double value.              |
+| `doubleParameter<id, label, minValue, maxValue, step>(defaultValue)`                                                                    | Create a double configuration field with step. Returns the current double value.    |
+| `longParameter<id, label, minValue, maxValue>(defaultValue)`                                                                            | Create a long configuration field. Returns the current long value.                  |
+| `longParameter<id, label, minValue, maxValue, step>(defaultValue)`                                                                      | Create a long configuration field with step. Returns the current long value.        |
+| `ulongParameter<id, label, minValue, maxValue>(defaultValue)`                                                                           | Create an unsigned long configuration field. Returns the current value.             |
+| `ulongParameter<id, label, minValue, maxValue, step>(defaultValue)`                                                                     | Create an unsigned long configuration field with step. Returns the current value.   |
+| `ipv4Parameter<id, label, required>(defaultValue)`                                                                                       | Create an IPv4 address configuration field. Returns the current IPAddress.          |
+| `customHtmlParameter<id>(html)`                                                                                                          | Create a custom HTML field that renders the provided HTML snippet.                  |
+| `wifiParameters<idPrefix, label>(defaultSSID, defaultPassword)`                                                                          | Create WiFi configuration parameters (SSID and password).                           |
+| `apParameters(defaultSSID, defaultPassword)`                                                                                             | Create Access Point configuration parameters.                                       |
+| `networkParameters<idPrefix, label>(defaultDhcp, defaultIp, defaultGateway, defaultSubnet, defaultDns1, defaultDns2, defaultHostname)`   | Create network configuration parameters (DHCP, IP, gateway, subnet, DNS, hostname). |
 
 ### WifiUtil
 

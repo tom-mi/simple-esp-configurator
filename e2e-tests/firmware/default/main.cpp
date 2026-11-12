@@ -77,36 +77,33 @@ void setup() {
     }
 
     // fields to be tested
-    const auto str1 = config.stringParameter<"str1", "String", "abc", 3, 5, "", false>();
-    const auto str2 = config.stringParameter<"str2", "Regex", "Abc", 0, INT_MAX, "[A-Z][a-z]+">();
-    const auto str3 = config.stringParameter<"str3", "String3", "", -1, -1, "", false>();
-    const auto ip1 = config.ipv4Parameter<"ip1", "IP1", "127.0.0.1", false>();
-    const auto ip2 = config.ipv4Parameter<"ip2", "IP2", "127.0.0.2">();
-    const auto bool1 = config.boolParameter<"bool1", "Boolean1", true>();
-    const auto bool2 = config.boolParameter<"bool2", "Boolean2", false>();
-    const auto double1 = config.doubleParameter<"double1", "Double1", 42.0, -1000000.0, 1000000.0>();
-    const auto double2 = config.doubleParameter<"double2", "Double2", 3.14, 1.0, 10.0>();
-    const auto double3 = config.doubleParameter<"double3", "Double3", 2.1, 0.1, 5.0, 0.5>();
-    const auto long1 = config.longParameter<"long1", "Long1", 42L, -1000000000L, 1000000000L>();
-    const auto long2 = config.longParameter<"long2", "Long2", 1000L, 100L, 10000L>();
-    const auto ulong1 = config.ulongParameter<"ulong1", "ULong1", 42UL, 0UL, 1000000000UL>();
-    const auto ulong2 = config.ulongParameter<"ulong2", "ULong2", 1000UL, 100UL, 10000UL>();
-    const auto p1 = config.passwordParameter<"p1", "Password1", "s3cr3t", 4, 8>();
-    const auto p2 = config.passwordParameter<"p2", "Password2", "", -1, -1, false>();
-    const auto adminPassword = config.passwordParameter<"pw", "Admin Password", "", -1, -1, false>();
+    const auto str1 = config.stringParameter<"str1", "String", 3, 5, "", false>("abc");
+    const auto str2 = config.stringParameter<"str2", "Regex", 0, INT_MAX, "[A-Z][a-z]+">("Abc");
+    const auto str3 = config.stringParameter<"str3", "String3", -1, -1, "", false>("");
+    const auto ip1 = config.ipv4Parameter<"ip1", "IP1", false>("127.0.0.1");
+    const auto ip2 = config.ipv4Parameter<"ip2", "IP2">("127.0.0.2");
+    const auto bool1 = config.boolParameter<"bool1", "Boolean1">(true);
+    const auto bool2 = config.boolParameter<"bool2", "Boolean2">(false);
+    const auto double1 = config.doubleParameter<"double1", "Double1", -1000000.0, 1000000.0>(42.0);
+    const auto double2 = config.doubleParameter<"double2", "Double2", 1.0, 10.0>(3.14);
+    const auto double3 = config.doubleParameter<"double3", "Double3", 0.1, 5.0, 0.5>(2.1);
+    const auto long1 = config.longParameter<"long1", "Long1", -1000000000L, 1000000000L>(42L);
+    const auto long2 = config.longParameter<"long2", "Long2", 100L, 10000L>(1000L);
+    const auto ulong1 = config.ulongParameter<"ulong1", "ULong1", 0UL, 1000000000UL>(42UL);
+    const auto ulong2 = config.ulongParameter<"ulong2", "ULong2", 100UL, 10000UL>(1000UL);
+    const auto p1 = config.passwordParameter<"p1", "Password1", 4, 8>("s3cr3t");
+    const auto p2 = config.passwordParameter<"p2", "Password2", -1, -1, false>("");
+    const auto adminPassword = config.passwordParameter<"pw", "Admin Password", -1, -1, false>("");
     config.setAdminPassword(adminPassword);
-    const auto ap1 = config.apParameters<"my_ap_ssid", "my_ap_pass">();
-    const auto wifi1 = config.wifiParameters<"my_ssid", "my_pass1", "wifi1_", "MyWiFi">();
-    const auto net1 = config.networkParameters<
-        false, "net1_", "MyNetwork",
+    const auto ap1 = config.apParameters("my_ap_ssid", "my_ap_pass");
+    const auto wifi1 = config.wifiParameters<"wifi1_", "MyWiFi">("my_ssid", "my_pass1");
+    const auto net1 = config.networkParameters<"net1_", "MyNetwork">(
+        false,
         "192.168.10.2", "192.168.10.1", "255.255.0.0",
         "1.2.3.4", "5.6.7.8",
         "my-hostname"
-    >();
-    config.customHtmlParameter<
-        "custom1",
-        "<span>Some visible content here</span>"
-    >();
+    );
+    config.customHtmlParameter<"custom1">("<span>Some visible content here</span>");
     std::string fieldBody = "<table>";
     fieldBody += "<tr><td>str1</td><td>" + str1 + "</td></tr>";
     fieldBody += "<tr><td>str2</td><td>" + str2 + "</td></tr>";
