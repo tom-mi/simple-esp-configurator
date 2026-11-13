@@ -261,7 +261,7 @@ namespace SimpleEspConfigurator {
         // TODO ESP8266
         const uint64_t chipId = ESP.getEfuseMac(); // For ESP32
         char chipMacStr[13];
-        snprintf(chipMacStr, sizeof(chipMacStr), "%012llX", chipId);
+        snprintf(chipMacStr, sizeof(chipMacStr), "%012llX", __bswap64(chipId));
         return std::string("ESP-") + chipMacStr;
     }
 } // namespace SimpleEspConfigurator
