@@ -363,3 +363,14 @@ def test_custom_html1_visibility(config_page):
     config_page.goto()
 
     expect(config_page.page.get_by_text("Some visible content here")).to_be_visible()
+
+
+def test_table_css_applied(field_page):
+    # when
+    field_page.goto()
+
+    # then
+    table = field_page.page.locator('table')
+    expect(table).to_have_css('border-collapse', 'collapse')
+    expect(table).to_have_css('width', '400px')  # 100% of the 400px max-width container
+    expect(table).to_have_css('border', '1px solid rgb(102, 102, 102)')

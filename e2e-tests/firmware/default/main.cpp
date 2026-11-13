@@ -139,6 +139,7 @@ void setup() {
     // features to be tested
     config.deviceName("e2e-testing");
     config.customHomePageHtml("<p><b>This is custom page html</b></p>");
+    config.footer("<p>version 1.2.3 <a href='https://github.com/tom-mi/simple-esp-configurator'>github</a></p>");
 
     const auto server = config.server();
     config.server()->on("/fields", [server, fieldResponse] {

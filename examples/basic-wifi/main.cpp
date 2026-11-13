@@ -32,6 +32,9 @@ void setup() {
     // Sets the device name shown on the config page.
     config.deviceName("hello-world");
 
+    // Sets the footer shown on all pages.
+    config.footer("<p>version 1.2.3 <a href='https://github.com/tom-mi/simple-esp-configurator'>github</a></p>");
+
     // Inserts raw HTML into the config page.
     config.customHtmlParameter<"custom">("<h3>WiFi</h3>");
 

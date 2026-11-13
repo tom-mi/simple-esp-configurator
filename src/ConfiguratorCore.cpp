@@ -38,6 +38,10 @@ namespace SimpleEspConfigurator {
             "button.primary{background-color:#ddf;border-color:#448;}\n"
             "button.danger{background-color:#fdd;border-color:#844;}\n"
             "button:hover{border-width:2px;padding:4px;}\n"
+            "table{border-collapse:collapse;width:100%;}\n"
+            "table,th,td{border:1px solid #666;}\n"
+            "th,td{padding:5px;text-align:left;}\n"
+            ".footer{text-align:center;font-size:70%;color:#666;}\n"
             "</style>\n";
 
     static auto HTML_ENDHEAD_BODY = "</head>\n"
@@ -252,6 +256,9 @@ namespace SimpleEspConfigurator {
         if (backButton) {
             out += "<div class='item'><form action='/'><button "
                     "type='submit'>Back</button></form></div>\n";
+        }
+        if (!_footer.empty()) {
+            out += "<div class='footer'>" + _footer + "</div>\n";
         }
         out += HTML_ENDBODY_ENDHTML;
         return out;

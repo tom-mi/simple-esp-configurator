@@ -30,10 +30,10 @@ See the [examples](./examples):
 <!-- START example table -->
 | Example | Size (bytes) | Delta to baseline (bytes) |
 |---------|--------------:|---------------------------:|
-| [basic-wifi](./examples/basic-wifi) | 1052512 | +129744 |
-| [minimal](./examples/minimal) | 1008880 | +86112 |
-| [minimal-ethernet](./examples/minimal-ethernet) | 530480 | -392288 |
-| [minimal-wifi](./examples/minimal-wifi) | 1016016 | +93248 |
+| [basic-wifi](./examples/basic-wifi) | 1053056 | +130288 |
+| [minimal](./examples/minimal) | 1009232 | +86464 |
+| [minimal-ethernet](./examples/minimal-ethernet) | 530832 | -391936 |
+| [minimal-wifi](./examples/minimal-wifi) | 1016368 | +93600 |
 <!-- END example table -->
 
 ## Configuration reference
@@ -44,6 +44,7 @@ See the [examples](./examples):
 |----------------------------------------------------------|---------------------------------------------------------------------------|
 | `deviceName(name)`                                       | Set the device name to display in the UI.                                 |
 | `customHomePageHtml(html)`                               | Set custom HTML to prepend to the rendered home page body.                |
+| `footer(html)`                                           | Set the footer HTML to append to the rendered page body.                  |
 | `server()`                                               | Get the underlying WebServer instance.                                    |
 | `startWebServer()`                                       | Start the web server for serving configuration pages.                     |
 | `loop()`                                                 | Handle web server requests. Must be called periodically in the main loop. |

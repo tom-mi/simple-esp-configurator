@@ -33,6 +33,14 @@ namespace SimpleEspConfigurator {
         }
 
         /**
+         * @brief Set the footer HTML to append to the rendered page body.
+         * @param html The HTML content to append as footer.
+         */
+        void footer(const std::string &html) {
+            _footer = html;
+        }
+
+        /**
          * @brief Get the underlying WebServer instance.
          * @return Pointer to the WebServer.
          */
@@ -145,6 +153,8 @@ namespace SimpleEspConfigurator {
         static void _erasePreferences();
 
         std::string _customHomePageHtml;
+
+        std::string _footer;
 
         std::string _adminPw;
     };
