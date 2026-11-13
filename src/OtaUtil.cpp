@@ -44,10 +44,10 @@ namespace SimpleEspConfigurator {
     static std::string renderOtaPage(const ConfiguratorCore &configurator) {
         const std::string body =
                 "<form method='post' enctype='multipart/form-data' action='/update'"
-                " onsubmit='return confirm(\"Overwrite firmware?\");'>\n"
-                "<div class='item'><input type='file' name='file' required accept='.bin' /></item>\n"
-                "<div class='item'><button class='danger' type='submit'>Upload</button></div>\n"
-                "</form>\n";
+                " onsubmit='return confirm(\"Overwrite firmware?\");'>"
+                "<div class='item'><input type='file' name='file' required accept='.bin' /></item>"
+                "<div class='item'><button class='danger' type='submit'>Upload</button></div>"
+                "</form>";
         return configurator.renderPage("OTA update", body, "", true);
     }
 

@@ -58,7 +58,7 @@ namespace SimpleEspConfigurator {
             } else {
                 out += "step='any' ";
             }
-            out += ">\n";
+            out += ">";
             return out;
         };
 

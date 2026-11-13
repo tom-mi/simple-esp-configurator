@@ -35,7 +35,7 @@ namespace SimpleEspConfigurator {
         if (_value) {
             out += "checked ";
         }
-        out += ">\n<label for='" + _id + "'>" + _label + "</label>\n";
+        out += "><label for='" + _id + "'>" + _label + "</label>";
         return out;
     }
 

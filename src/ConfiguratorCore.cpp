@@ -10,47 +10,31 @@ namespace SimpleEspConfigurator {
     static auto RESTART_DELAY_MS = 200;
 
     static auto HTML_HTML_HEAD_CHARSET =
-            "<!doctype html>\n"
-            "<html>\n"
-            "<head>\n"
-            "<meta name='viewport' content='width=device-width, initial-scale=1, "
-            "user-scalable=no' />\n"
-            "<meta charset='utf-8' />\n"
-            "<style>\n"
-            "body{background-color:#334;position:absolute;top:0;bottom:0;left:0;right:"
-            "0;margin:0;}\n"
-            ".content{position:relative;min-height: 100%; max-width:400px; "
-            "margin-left:auto; margin-right:auto;"
-            " border-sizing:border-box;"
-            " background-color:#fff; padding:10px;}\n"
-            ".inner{position:relative;}\n"
-            "h1{font-size:1.5em;}\n"
-            "h2{font-size:1.3em;}\n"
-            "input{display: block; border:1px solid "
-            "#666;border-radius:0;font-size:120%;"
-            " width:100%;box-sizing:border-box;}\n"
-            "input[type='checkbox']{display:inline;transform:scale(1.4);width:inherit;}"
-            "\n"
-            ".item{margin:12px 0;}\n"
-            "button{display:block;background-color:#eee;border:1px solid "
-            "#666;border-radius:0;font-size:120%;"
-            " width:100%;padding:5px;cursor:pointer;}\n"
-            "button.primary{background-color:#ddf;border-color:#448;}\n"
-            "button.danger{background-color:#fdd;border-color:#844;}\n"
-            "button:hover{border-width:2px;padding:4px;}\n"
-            "table{border-collapse:collapse;width:100%;}\n"
-            "table,th,td{border:1px solid #666;}\n"
-            "th,td{padding:5px;text-align:left;}\n"
-            ".footer{text-align:center;font-size:70%;color:#666;}\n"
-            "</style>\n";
+            "<!doctype html><html><head>"
+            "<meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=no'/>"
+            "<meta charset='utf-8'/>"
+            "<style>"
+            "body{background-color:#334;position:absolute;top:0;bottom:0;left:0;right:0;margin:0}"
+            ".content{position:relative;min-height:100%;max-width:400px;margin-left:auto;margin-right:auto;border-sizing:border-box;background-color:#fff;padding:10px}"
+            ".inner{position:relative}"
+            "h1{font-size:1.5em}"
+            "h2{font-size:1.3em}"
+            "input{display:block;border:1px solid #666;border-radius:0;font-size:120%;width:100%;box-sizing:border-box}"
+            "input[type='checkbox']{display:inline;transform:scale(1.4);width:inherit}"
+            ".item{margin:12px 0}"
+            "button{display:block;background-color:#eee;border:1px solid #666;border-radius:0;font-size:120%;width:100%;padding:5px;cursor:pointer}"
+            "button.primary{background-color:#ddf;border-color:#448}"
+            "button.danger{background-color:#fdd;border-color:#844}"
+            "button:hover{border-width:2px;padding:4px}"
+            "table{border-collapse:collapse;width:100%}"
+            "table,th,td{border:1px solid #666}"
+            "th,td{padding:5px;text-align:left}"
+            ".footer{text-align:center;font-size:70%;color:#666}"
+            "</style>";
 
-    static auto HTML_ENDHEAD_BODY = "</head>\n"
-            "<body>\n"
-            "<div class='content'><div class='inner'>\n";
+    static auto HTML_ENDHEAD_BODY = "</head><body><div class='content'><div class='inner'>";
 
-    static auto HTML_ENDBODY_ENDHTML = "</div></div>\n"
-            "</body>\n"
-            "</html>\n";
+    static auto HTML_ENDBODY_ENDHTML = "</div></div></body></html>";
 
     constexpr auto ADMIN_USER_PREFIX = "admin:";
 
@@ -105,7 +89,7 @@ namespace SimpleEspConfigurator {
     }
 
     void ConfiguratorCore::startWebServer() {
-        ESP_LOGI(SEC_LOG_TAG, "Starting web server ...");
+        ESP_LOGI(SEC_LOG_TAG, "Starting web server");
         _server.on("/", HTTP_GET, [this]() {
             _server.send(200, "text/html", _renderHomePage().c_str());
         });
@@ -157,7 +141,7 @@ namespace SimpleEspConfigurator {
             reboot();
         });
         _server.begin();
-        ESP_LOGI(SEC_LOG_TAG, "Web server started.");
+        ESP_LOGI(SEC_LOG_TAG, "Web server started");
     }
 
     void ConfiguratorCore::loop() { _server.handleClient(); }
@@ -175,7 +159,7 @@ namespace SimpleEspConfigurator {
     }
 
     void ConfiguratorCore::_erasePreferences() {
-        ESP_LOGI(SEC_LOG_TAG, "Erasing preferences.");
+        ESP_LOGI(SEC_LOG_TAG, "Erasing preferences");
         Preferences prefs;
         prefs.begin(SEC_PREF_NS);
         prefs.clear();
@@ -187,26 +171,26 @@ namespace SimpleEspConfigurator {
         std::string body;
         if (hasValidationError) {
             body += "<div class='error'>Validation error! This should not happen. "
-                    "Please check the device logs.</div>\n";
+                    "Please check the device logs.</div>";
         }
-        body += "<form class='configuration' action='/config' method='post'>\n";
+        body += "<form class='configuration' action='/config' method='post'>";
         for (const auto f: _fields) {
-            body += "<div class='item'>\n";
+            body += "<div class='item'>";
             body += f->generateHtml();
-            body += "</div>\n";
+            body += "</div>";
         }
         body += "<div class='item'><button class='primary' type='submit'>Save "
-                "configuration &amp; reboot</button></item>\n";
-        body += "</form>\n";
+                "configuration &amp; reboot</button></item>";
+        body += "</form>";
         return renderPage("Configuration", body);
     }
 
     std::string ConfiguratorCore::renderRedirectToHomePage(
         const std::string &message) const {
         const std::string extraHead =
-                "<meta http-equiv='refresh' content='2;url=/' />\n";
-        const std::string body = "<p>" + message + "</p>\n" +
-                                 "<p>You will be redirected to the start page.</p>\n";
+                "<meta http-equiv='refresh' content='2;url=/' />";
+        const std::string body = "<p>" + message + "</p>" +
+                                 "<p>You will be redirected to the start page.</p>";
         return renderPage("", body, extraHead, false);
     }
 
@@ -216,24 +200,24 @@ namespace SimpleEspConfigurator {
             if (admin && !isRequestAuthenticated()) {
                 continue;
             }
-            body += "<div class='item'><form action='" + path + "'>\n";
-            body += "  <button type='submit'>" + label + "</button>\n";
-            body += "</form></div>\n";
+            body += "<div class='item'><form action='" + path + "'>";
+            body += "  <button type='submit'>" + label + "</button>";
+            body += "</form></div>";
         }
         if (isRequestAuthenticated()) {
-            body += "<div class='item'><form action='/reboot' method='post'>\n";
-            body += "  <button type='submit'>Reboot</button>\n";
-            body += "</form></div>\n";
+            body += "<div class='item'><form action='/reboot' method='post'>";
+            body += "  <button type='submit'>Reboot</button>";
+            body += "</form></div>";
             body += "<div class='item'><form action='/reset' method='post'";
-            body += " onsubmit='return confirm(\"Erase config?\");'>\n";
+            body += " onsubmit='return confirm(\"Erase config?\");'>";
             body += "  <button class='danger' type='submit'>Reset configuration & "
-                    "reboot</button>\n";
-            body += "</form></div>\n";
+                    "reboot</button>";
+            body += "</form></div>";
         }
         if (!isRequestAuthenticated()) {
-            body += "<div class='item'><form action='/login' method='post'>\n";
-            body += "  <button type='submit'>Login</button>\n";
-            body += "</form></div>\n";
+            body += "<div class='item'><form action='/login' method='post'>";
+            body += "  <button type='submit'>Login</button>";
+            body += "</form></div>";
         }
         return renderPage("", body, "", false);
     }
@@ -247,18 +231,18 @@ namespace SimpleEspConfigurator {
         if (!title.empty()) {
             out += " &mdash; " + escapeHtml(title);
         }
-        out += "</title>\n";
+        out += "</title>";
         out += extraHead;
         out += HTML_ENDHEAD_BODY;
-        out += "<h1>" + escapeHtml(_deviceName) + "</h1>\n";
-        out += "<h2>" + escapeHtml(title) + "</h2>\n";
+        out += "<h1>" + escapeHtml(_deviceName) + "</h1>";
+        out += "<h2>" + escapeHtml(title) + "</h2>";
         out += body;
         if (backButton) {
             out += "<div class='item'><form action='/'><button "
-                    "type='submit'>Back</button></form></div>\n";
+                    "type='submit'>Back</button></form></div>";
         }
         if (!_footer.empty()) {
-            out += "<div class='footer'>" + _footer + "</div>\n";
+            out += "<div class='footer'>" + _footer + "</div>";
         }
         out += HTML_ENDBODY_ENDHTML;
         return out;

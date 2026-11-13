@@ -30,10 +30,10 @@ See the [examples](./examples):
 <!-- START example table -->
 | Example | Size (bytes) | Delta to baseline (bytes) |
 |---------|--------------:|---------------------------:|
-| [basic-wifi](./examples/basic-wifi) | 1053056 | +130288 |
-| [minimal](./examples/minimal) | 1009232 | +86464 |
-| [minimal-ethernet](./examples/minimal-ethernet) | 530832 | -391936 |
-| [minimal-wifi](./examples/minimal-wifi) | 1016368 | +93600 |
+| [basic-wifi](./examples/basic-wifi) | 1052960 | +130192 |
+| [minimal](./examples/minimal) | 1009152 | +86384 |
+| [minimal-ethernet](./examples/minimal-ethernet) | 530736 | -392032 |
+| [minimal-wifi](./examples/minimal-wifi) | 1016288 | +93520 |
 <!-- END example table -->
 
 ## Configuration reference

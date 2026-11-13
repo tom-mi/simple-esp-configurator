@@ -67,7 +67,7 @@ namespace SimpleEspConfigurator {
         } else {
             out += " value='" + escapeHtml(_value) + "'";
         }
-        out += "/>\n";
+        out += "/>";
 
         return out;
     }
